@@ -1,0 +1,437 @@
+﻿<UserControl 
+	x:Name="userControl"
+	x:Class="FoxHornKeyboard.Layouts.EnglishKeyboardLayout"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:languages="clr-namespace:FoxHornKeyboard.ViewModels.Languages"
+	mc:Ignorable="d" 
+	BorderBrush="{DynamicResource MahApps.Brushes.DataGrid.Selection.BorderBrush.Focus}" 
+	Padding="1,1,1,1" 
+	Background="{DynamicResource MahApps.Brushes.Window.Background}" 
+	BorderThickness="1,1,1,1" 
+	SnapsToDevicePixels="True" >
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+				<ResourceDictionary>
+					<Style x:Key="KeyboardButton" BasedOn="{StaticResource MahApps.Styles.Button.Flat}" TargetType="Button">
+						<Setter Property="FontSize" Value="22"/>
+						<Setter Property="FontWeight" Value="Bold"/>
+						<Setter Property="MinWidth" Value="30" />
+						<Setter Property="MinWidth" Value="40" />
+						<Setter Property="MinHeight" Value="40" />
+						<Setter Property="Padding" Value="5,6"/>
+						<Setter Property="Margin" Value="3"/>
+					</Style>
+					<Style x:Key="KeyboardToggleButton" BasedOn="{StaticResource MahApps.Styles.ToggleButton.Flat}" TargetType="ToggleButton">
+						<Setter Property="FontSize" Value="22"/>
+						<Setter Property="FontWeight" Value="Bold"/>
+						<Setter Property="MinWidth" Value="40" />
+						<Setter Property="MinHeight" Value="40" />
+						<Setter Property="MinHeight" Value="25"/>
+						<Setter Property="Padding" Value="5,6"/>
+						<Setter Property="Margin" Value="3"/>
+					</Style>
+				</ResourceDictionary>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<UserControl.DataContext>
+		<languages:EnglishKeyboardLayoutViewModel />
+	</UserControl.DataContext>
+	<Grid>
+		<Grid x:Name="Keyboard" Visibility="{Binding KeyboardVisibility}" >
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="0.55*"/>
+				<ColumnDefinition Width="0.225*"/>
+				<ColumnDefinition Width="0.225*"/>
+				<!--<ColumnDefinition Width="0.194805195*"/>-->
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="0.20*" MaxHeight="30"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+			</Grid.RowDefinitions>
+
+
+			<Grid Grid.ColumnSpan="3" MinHeight="30" >
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="50"/>
+				</Grid.ColumnDefinitions>
+				<Border Background="{DynamicResource MahApps.Brushes.Control.Background}" BorderBrush="{DynamicResource MahApps.Brushes.Control.Border}" Margin="8,0,8,0">
+					<Grid>
+						<TextBlock Text="{Binding Text}" TextWrapping="Wrap" VerticalAlignment="Center" FontFamily="Consolas" FontSize="24" Margin="8,0,8,0"/>
+						<Canvas Grid.ColumnSpan="1">
+							<Rectangle Fill="{Binding SelectionBrush}" Height="{Binding SelectionHeight}" Stroke="{DynamicResource MahApps.Brushes.Highlight}" Width="{Binding SelectionWidth}" Canvas.Left="{Binding SelectionX}" Canvas.Top="{Binding SelectionY}" StrokeThickness="0">
+								<!--<Rectangle.Fill>
+								<SolidColorBrush Color="{Binding SelectionBrush}" />
+							</Rectangle.Fill>-->
+							</Rectangle>
+
+						</Canvas>
+					</Grid>
+				</Border>
+				<Button x:Name="closeButton" d:LayoutOverrides="Height" Grid.Column="1" Margin="2,2,2,2" Style="{StaticResource MahApps.Styles.Button.MetroWindow.Close.Light.Win10}" Click="closeButton_Click">
+					<Image Height="20" Width="20" Source="/FoxHornKeyboard;component/Assets/xout.png" />
+				</Button>
+			</Grid>
+
+			<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.133333333*" />
+				</Grid.ColumnDefinitions>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="0" Grid.Row="0"  Content="{Binding Position_0_0Display}"  CommandParameter="0|0" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0"  Content="{Binding Position_0_1Display}"  CommandParameter="0|1" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="{Binding Position_0_2Display}"  CommandParameter="0|2" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0"  Content="{Binding Position_0_3Display}"  CommandParameter="0|3" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="0"  Content="{Binding Position_0_4Display}"  CommandParameter="0|4" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="5" Grid.Row="0"  Content="{Binding Position_0_5Display}"  CommandParameter="0|5" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="6" Grid.Row="0"  Content="{Binding Position_0_6Display}"  CommandParameter="0|6" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="7" Grid.Row="0"  Content="{Binding Position_0_7Display}"  CommandParameter="0|7" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="8" Grid.Row="0"  Content="{Binding Position_0_8Display}"  CommandParameter="0|8" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="9" Grid.Row="0"  Content="{Binding Position_0_9Display}"  CommandParameter="0|9" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="10" Grid.Row="0" Content="{Binding Position_0_10Display}" CommandParameter="0|10" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="11" Grid.Row="0" Content="{Binding Position_0_11Display}" CommandParameter="0|11" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="12" Grid.Row="0" Content="{Binding Position_0_12Display}" CommandParameter="0|12" />
+				<Button Command="{Binding BackspaceCommand, Mode=OneWay}" Style="{StaticResource KeyboardButton}" Grid.Column="13" Grid.Row="0" >
+					<StackPanel Orientation="Horizontal">
+						<Image Source="/FoxHornKeyboard;component/Assets/backspace.png" Width="30" Height="30" Stretch="Fill" />
+						<TextBlock Text="Back" FontSize="14" VerticalAlignment="Center" />
+
+					</StackPanel>
+				</Button>
+			</Grid>
+			<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.1*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.1*" />
+				</Grid.ColumnDefinitions>
+				<Button Command="{Binding TabCommand, Mode=OneWay}" Style="{StaticResource KeyboardButton}" Grid.Column="0" Grid.Row="0" >
+					<Image Source="/FoxHornKeyboard;component/Assets/tab.png" Width="30" Height="30"/>
+				</Button>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0"  Content="{Binding Position_1_1Display}"	 CommandParameter="1|1"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="{Binding Position_1_2Display}"	 CommandParameter="1|2"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0"  Content="{Binding Position_1_3Display}"	 CommandParameter="1|3"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="0"  Content="{Binding Position_1_4Display}"	 CommandParameter="1|4"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="5" Grid.Row="0"  Content="{Binding Position_1_5Display}"	 CommandParameter="1|5"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="6" Grid.Row="0"  Content="{Binding Position_1_6Display}"	 CommandParameter="1|6"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="7" Grid.Row="0"  Content="{Binding Position_1_7Display}"	 CommandParameter="1|7"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="8" Grid.Row="0"  Content="{Binding Position_1_8Display}"	 CommandParameter="1|8"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="9" Grid.Row="0"  Content="{Binding Position_1_9Display}"	 CommandParameter="1|9"/>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="10" Grid.Row="0" Content="{Binding Position_1_10Display}" CommandParameter="1|10" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="11" Grid.Row="0" Content="{Binding Position_1_11Display}" CommandParameter="1|11" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="12" Grid.Row="0" Content="{Binding Position_1_12Display}" CommandParameter="1|12" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="13" Grid.Row="0" Content="{Binding Position_1_13Display}" CommandParameter="1|13" />
+			</Grid>
+			<Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.125*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.141666667*" />
+				</Grid.ColumnDefinitions>
+				<ToggleButton Style="{StaticResource KeyboardToggleButton}" Grid.Column="0"  Grid.Row="0" Content="{Binding Position_2_0Display}"	 CommandParameter="2|0" IsChecked="{Binding IsCapLockActive}" FontSize="16" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1"  Grid.Row="0" Content="{Binding Position_2_1Display}"	 CommandParameter="2|1" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2"  Grid.Row="0" Content="{Binding Position_2_2Display}"	 CommandParameter="2|2" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3"  Grid.Row="0" Content="{Binding Position_2_3Display}"	 CommandParameter="2|3" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4"  Grid.Row="0" Content="{Binding Position_2_4Display}"	 CommandParameter="2|4" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="5"  Grid.Row="0" Content="{Binding Position_2_5Display}"	 CommandParameter="2|5" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="6"  Grid.Row="0" Content="{Binding Position_2_6Display}"	 CommandParameter="2|6" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="7"  Grid.Row="0" Content="{Binding Position_2_7Display}"	 CommandParameter="2|7" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="8"  Grid.Row="0" Content="{Binding Position_2_8Display}"	 CommandParameter="2|8" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="9"  Grid.Row="0" Content="{Binding Position_2_9Display}"	 CommandParameter="2|9" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="10" Grid.Row="0" Content="{Binding Position_2_10Display}"	 CommandParameter="2|10" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="11" Grid.Row="0" Content="{Binding Position_2_11Display}"	 CommandParameter="2|11" />
+				<Button Command="{Binding EnterCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="12" Grid.Row="0">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="ENTER" FontSize="14" />
+						<Image Source="/FoxHornKeyboard;component/Assets/enter.png" Width="26" Height="26" Margin="0,-10,0,0" />
+					</StackPanel>
+				</Button>
+
+			</Grid>
+			<Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.166666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.066666667*" />
+					<ColumnDefinition Width="0.166666667*" />
+				</Grid.ColumnDefinitions>
+				<ToggleButton Style="{StaticResource KeyboardToggleButton}" Grid.Column="0" Grid.Row="0"  IsChecked="{Binding IsShiftActive}" >
+					<StackPanel Orientation="Horizontal">
+
+						<Image Source="/FoxHornKeyboard;component/Assets/shift.png" Width="20" Height="20" VerticalAlignment="Center" Margin="0,-6,0,0" />
+						<TextBlock Text="Shift" FontSize="14" VerticalAlignment="Center" Margin="6,0,0,0" />
+					</StackPanel>
+				</ToggleButton>
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0"  Content="{Binding Position_3_1Display}"	 CommandParameter="3|1" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="{Binding Position_3_2Display}"	 CommandParameter="3|2" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0"  Content="{Binding Position_3_3Display}"	 CommandParameter="3|3" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="0"  Content="{Binding Position_3_4Display}"	 CommandParameter="3|4" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="5" Grid.Row="0"  Content="{Binding Position_3_5Display}"	 CommandParameter="3|5" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="6" Grid.Row="0"  Content="{Binding Position_3_6Display}"	 CommandParameter="3|6" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="7" Grid.Row="0"  Content="{Binding Position_3_7Display}"	 CommandParameter="3|7" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="8" Grid.Row="0"  Content="{Binding Position_3_8Display}"	 CommandParameter="3|8" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="9" Grid.Row="0"  Content="{Binding Position_3_9Display}"	 CommandParameter="3|9" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="10" Grid.Row="0" Content="{Binding Position_3_10Display}"	 CommandParameter="3|10" />
+				<ToggleButton Style="{StaticResource KeyboardToggleButton}" Grid.Column="11" Grid.Row="0"  IsChecked="{Binding IsShiftActive}" >
+					<StackPanel Orientation="Horizontal">
+
+						<Image Source="/FoxHornKeyboard;component/Assets/shift.png" Width="20" Height="20" VerticalAlignment="Center" Margin="0,-6,0,0" />
+						<TextBlock Text="Shift" FontSize="14" VerticalAlignment="Center" Margin="6,0,0,0" />
+					</StackPanel>
+				</ToggleButton>
+			</Grid>
+			<Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.525*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+				</Grid.ColumnDefinitions>
+
+				<Button  Command="{Binding ShowResultsCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="0" Grid.Row="0"  CommandParameter="4|0">
+					<Image Source="/FoxHornKeyboard;component/Assets/pick-list-item.png" Width="30" Height="30" />
+				</Button>
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0"  Content="{Binding Position_4_1Display}"	 CommandParameter="4|1" Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="{Binding Position_4_2Display}"	 CommandParameter="4|2" Visibility="Hidden" />
+				<Button  Command="{Binding SpaceCommand, Mode=OneWay}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0"  Content="SPACE"	 CommandParameter="4|3" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="0"  Content="{Binding Position_4_4Display}"	 CommandParameter="4|4" Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="5" Grid.Row="0"  Content="{Binding Position_4_5Display}"	 CommandParameter="4|5" Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="6" Grid.Row="0"  Content="{Binding Position_4_6Display}"	 CommandParameter="4|6" Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="7" Grid.Row="0"  Content="{Binding Position_4_7Display}"	 CommandParameter="4|7" Visibility="Hidden" />
+
+			</Grid>
+			<Grid Grid.Row="1" Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+				</Grid.ColumnDefinitions>
+				<Button Command="{Binding SelectAllCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0"  Content="{Binding SelectAllContent}" Visibility="Hidden" />
+				<Button Command="{Binding HomeCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="{Binding HomeContent}" />
+				<Button Command="{Binding SelectAllCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0"  Content="{Binding SelectAllContent}" />
+			</Grid>
+			<Grid Grid.Row="1" Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+				</Grid.ColumnDefinitions>
+				<Button Command="{Binding DeleteCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0">
+					<Image Source="/FoxHornKeyboard;component/Assets/delete.png" Width="30" Height="30"/>
+				</Button>
+
+				<Button Command="{Binding HomeCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0">
+					<Image Source="/FoxHornKeyboard;component/Assets/start.png" Width="30" Height="30"/>
+				</Button>
+				<Button Command="{Binding SelectAllCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0">
+					<Image Source="/FoxHornKeyboard;component/Assets/select-all.png" Width="30" Height="30"/>
+				</Button>
+			</Grid>
+			<Grid Grid.Row="2" Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+				</Grid.ColumnDefinitions>
+				<Button Command="{Binding DeleteCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0"  Visibility="Hidden">
+					<Image Source="/FoxHornKeyboard;component/Assets/delete.png" Width="30" Height="30"/>
+				</Button>
+				<Button Command="{Binding EndCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0">
+					<Image Source="/FoxHornKeyboard;component/Assets/end.png" Width="30" Height="30"/>
+				</Button>
+				<Button Command="{Binding ClearInputCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0">
+					<Image Source="/FoxHornKeyboard;component/Assets/erase.png" Width="30" Height="30"/>
+				</Button>
+			</Grid>
+			<Grid Grid.Row="4" Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  Width="0.125*" MinWidth="4"/>
+					<ColumnDefinition  Width="0.25*"/>
+					<ColumnDefinition  Width="0.25*"/>
+					<ColumnDefinition  Width="0.25*"/>
+					<ColumnDefinition  Width="0.125*" MinWidth="4"/>
+				</Grid.ColumnDefinitions>
+
+				<Button Command="{Binding UpArrowCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="{Binding DownArrowContent}" />
+
+			</Grid>
+			<Grid Grid.Row="5" Grid.Column="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.266666667*"/>
+					<ColumnDefinition  Width="0.1*" MinWidth="4"/>
+				</Grid.ColumnDefinitions>
+				<Button Command="{Binding LeftArrowCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0"  Content="{Binding LeftArrowContent}" />
+				<Button Command="{Binding DownArrowCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="{Binding DownArrowContent}" />
+				<Button Command="{Binding RightArrowCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0"  Content="{Binding RightArrowContent}" />
+			</Grid>
+
+
+			<Grid Grid.Row="1" Grid.Column="2" Grid.RowSpan="5">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition  Width="0.066666667*" MinWidth="4"/>
+					<ColumnDefinition  Width="0.216666667*"/>
+					<ColumnDefinition  Width="0.216666667*"/>
+					<ColumnDefinition  Width="0.216666667*"/>
+					<ColumnDefinition  Width="0.216666667*"/>
+					<ColumnDefinition  Width="0.066666667*" MinWidth="4"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="0.20*"/>
+					<RowDefinition Height="0.20*"/>
+					<RowDefinition Height="0.20*"/>
+					<RowDefinition Height="0.20*"/>
+					<RowDefinition Height="0.20*"/>
+				</Grid.RowDefinitions>
+
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0"  Content="/" CommandParameter="/"  />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0"  Content="*" CommandParameter="*"  />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="0"  Content="-" CommandParameter="-"  />
+
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2"  Content="0"  CommandParameter="0" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2"  Content="+" CommandParameter="+" />
+				<Button Command="{Binding EnterCommand, Mode=OneWay}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="3" Grid.RowSpan="2">
+					<StackPanel Orientation="Vertical">
+						<TextBlock Text="ENT" FontSize="14" HorizontalAlignment="Center" />
+						<Image Source="/FoxHornKeyboard;component/Assets/enter.png" Width="26" Height="26" Margin="0,10,0,0" />
+					</StackPanel>
+				</Button>
+
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="1" Content="7" CommandParameter="7" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="1" Content="8" CommandParameter="8" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="1" Content="9" CommandParameter="9" />
+
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="2" Content="4" CommandParameter="4" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="2" Content="5" CommandParameter="5" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="2" Content="6" CommandParameter="6" />
+
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="3" Content="1" CommandParameter="1" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="3" Content="2" CommandParameter="2" />
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="3" Content="3" CommandParameter="3" />
+
+				<Button Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="4" Content="." CommandParameter="." />
+
+			</Grid>
+
+		</Grid>
+		<Grid x:Name="AutocompleteResults" Grid.ColumnSpan="3" Margin="0,30,0,0" Background="{DynamicResource MahApps.Brushes.Control.Background}" Visibility="{Binding ResultsVisibility}" d:IsHidden="True">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="0.55*"/>
+				<ColumnDefinition Width="0.225*"/>
+				<ColumnDefinition Width="0.225*"/>
+				<!--<ColumnDefinition Width="0.194805195*"/>-->
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="0.20*" MaxHeight="30"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+				<RowDefinition Height="0.2*"/>
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.525*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+					<ColumnDefinition Width="0.075*" />
+				</Grid.ColumnDefinitions>
+
+				<Button  Command="{Binding ShowResultsCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="0" Grid.Row="0"  CommandParameter="4|0">
+					<Image Source="/FoxHornKeyboard;component/Assets/keyboard.png" Width="30" Height="30" />
+				</Button>
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="1" Grid.Row="0" Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="2" Grid.Row="0" Visibility="Hidden" />
+				<Button  Command="{Binding SpaceCommand, Mode=OneWay}" Style="{StaticResource KeyboardButton}" Grid.Column="3" Grid.Row="0" Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="4" Grid.Row="0"   Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="5" Grid.Row="0"   Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="6" Grid.Row="0"   Visibility="Hidden" />
+				<Button  Command="{Binding KeyPressCommand}" Style="{StaticResource KeyboardButton}" Grid.Column="7" Grid.Row="0"   Visibility="Hidden" />
+
+			</Grid>
+			<ItemsControl Margin="60,0,0,0" Grid.RowSpan="5" Grid.ColumnSpan="3" ItemsSource="{Binding Results}" d:Width="1200">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel ItemHeight="60" ItemWidth="200" />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Button Margin="6" Content="{Binding Name}" Command="{Binding Path=DataContext.PickResultItemCommand,ElementName=userControl}" CommandParameter="{Binding}" />
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</Grid>
+	</Grid>
+</UserControl>

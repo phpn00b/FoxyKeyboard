@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<AssemblyName>FoxHornKeyboard</AssemblyName>
+		<RootNamespace>FoxHornKeyboard</RootNamespace>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="..\KeyboardTest\Controls\TextInputWithOnscreenKeyboard.xaml.cs" Link="Controls\TextInputWithOnscreenKeyboard.xaml.cs" />
+		<Compile Include="..\KeyboardTest\DpiUtilities.cs" Link="DpiUtilities.cs" />
+		<Compile Include="..\KeyboardTest\Layouts\EnglishKeyboardLayout.xaml.cs" Link="Layouts\EnglishKeyboardLayout.xaml.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\BaseKeyboardLayoutViewModel.cs" Link="ViewModels\BaseKeyboardLayoutViewModel.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\BaseViewModel.cs" Link="ViewModels\BaseViewModel.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\GenericCommand.cs" Link="ViewModels\GenericCommand.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs" Link="ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Assets\" />
+		</ItemGroup>
+	<ItemGroup>
+		<Resource Include="..\KeyboardTest\Assets\backspace.png" Link="Assets\backspace.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\delete.png" Link="Assets\delete.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\end.png" Link="Assets\end.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\enter.png" Link="Assets\enter.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\erase.png" Link="Assets\erase.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\home.png" Link="Assets\home.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\keyboard.png" Link="Assets\keyboard.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\pick-list-item.png" Link="Assets\pick-list-item.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\select-all.png" Link="Assets\select-all.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\shift.png" Link="Assets\shift.png" />
+		<Resource Include="..\KeyboardTest\Assets\start.png" Link="Assets\start.png" />
+		<Resource Include="..\KeyboardTest\Assets\tab.png" Link="Assets\tab.png" />
+		<EmbeddedResource Include="..\KeyboardTest\Assets\xout.png" Link="Assets\xout.png" />
+	</ItemGroup>
+<!--
+	<ItemGroup>
+		<Folder Include="Assets\" />
+		<Folder Include="Controls\" />
+		<Folder Include="Layouts\" />
+		<Folder Include="Themes\" />
+		<Folder Include="ViewModels\Languages\" />
+	</ItemGroup>-->
+
+	<ItemGroup>
+		<PackageReference Include="MahApps.Metro" Version="2.4.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Include="..\KeyboardTest\Controls\TextInputWithOnscreenKeyboard.xaml" Link="Controls\TextInputWithOnscreenKeyboard.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="..\KeyboardTest\Layouts\EnglishKeyboardLayout.xaml" Link="Layouts\EnglishKeyboardLayout.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<Page Include="..\KeyboardTest\Themes\Generic.xaml" Link="Themes\Generic.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
+
+</Project>
