@@ -16,6 +16,8 @@ namespace FoxHornKeyboard.ViewModels
 	{
 		private readonly SolidColorBrush _visibleSelectionBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(50, 0, 120, 215));
 		private readonly SolidColorBrush _blinkSelectionBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(20, 0, 120, 215));
+		private int _selectedKeysNumber = 1;
+
 		protected static readonly string[][][] SpanishKeyMap = new[]
 		{
 			new string[][]
@@ -273,9 +275,9 @@ namespace FoxHornKeyboard.ViewModels
 			UpArrowCommand = new GenericCommand(o => true, OnUpArrowPress);
 			DownArrowCommand = new GenericCommand(o => true, OnDownArrowPress);
 			RightArrowCommand = new GenericCommand(o => InputIndex < Text?.Length, OnRightArrowPress);
-			LeftArrowCommand = new GenericCommand(o => InputIndex > 0, OnLeftArrowPress);
+			LeftArrowCommand = new GenericCommand(o => InputIndex > 0 || _selectedKeysNumber > 1, OnLeftArrowPress);
 			HomeCommand = new GenericCommand(o => InputIndex > 0, OnHomePress);
-			EndCommand = new GenericCommand(o => InputIndex < Text?.Length, OnEndPress);
+			EndCommand = new GenericCommand(o => InputIndex <= Text?.Length, OnEndPress);
 			PageUpCommand = new GenericCommand(o => true, OnPageUpPress);
 			PageDownCommand = new GenericCommand(o => true, OnPageDownPress);
 			SpaceCommand = new GenericCommand(o => true, OnSpaceBarPress);
@@ -356,10 +358,13 @@ namespace FoxHornKeyboard.ViewModels
 			var size = MeasureString(Text);
 			InputIndex = 0;
 			SelectionWidth = size.Width;
+			_selectedKeysNumber = Text.Length;
+			UpdateButtons();
 		}
 
 		private void OnClearInputPress(object obj)
 		{
+			RestartSelectionSize();
 			Text = "";
 			InputIndex = 0;
 		}
@@ -372,14 +377,46 @@ namespace FoxHornKeyboard.ViewModels
 		}
 
 		private void OnBackspacePress(object obj)
+		{  
+			var deleteSize = SelectionWidth > 1 ? _selectedKeysNumber : 1;
+
+			if (InputIndex > 0)
+			{
+				Text = Text.Remove(InputIndex - 1, deleteSize);
+				InputIndex--;
+			}
+			else
+			{
+				Text = Text.Remove(0, deleteSize);
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
+		}
+
+		private void RestartSelectionSize(bool restartIndex = true)
 		{
-			Text = Text.Remove(InputIndex - 1, 1);
-			InputIndex--;
+			if (restartIndex)
+			{
+				InputIndex = 0;
+			}
+			_selectedKeysNumber = 1;
+			SelectionWidth =  5;
 		}
 
 		private void OnDeletePress(object obj)
 		{
-			Text = Text.Remove(InputIndex, 1);
+			if (_selectedKeysNumber > 1)
+			{
+				Text = Text.Remove(InputIndex, _selectedKeysNumber);
+			}
+			else
+			{
+				Text = Text.Remove(InputIndex, 1);
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnUpArrowPress(object obj)
@@ -394,24 +431,45 @@ namespace FoxHornKeyboard.ViewModels
 
 		private void OnRightArrowPress(object obj)
 		{
-			InputIndex++;
+			if (_selectedKeysNumber > 1)
+			{
+				InputIndex = Text.Length;
+			}
+			else
+			{
+				InputIndex++;
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnLeftArrowPress(object obj)
 		{
-			InputIndex--;
+			if (_selectedKeysNumber > 1)
+			{
+				InputIndex = Text.Length - (_selectedKeysNumber);
+			}
+			else
+			{
+				InputIndex--;
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnHomePress(object obj)
 		{
-			InputIndex = 0;
-
+			RestartSelectionSize();
+			UpdateButtons();
 		}
 
 		private void OnEndPress(object obj)
 		{
-			InputIndex = Text.Length - 1;
-
+			InputIndex = Text.Length;
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnPageUpPress(object obj)
@@ -426,8 +484,10 @@ namespace FoxHornKeyboard.ViewModels
 
 		private void OnSpaceBarPress(object obj)
 		{
+			RestartSelectionSize(false);
 			Text += " ";
 			InputIndex++;
+			UpdateButtons();
 		}
 
 		private void OnTabPress(object obj)
