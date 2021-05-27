@@ -330,7 +330,10 @@ namespace FoxHornKeyboard.ViewModels
 				Text = "";
 			if (args?.Length > 2)
 			{
+
 				var pos = args.Split('|').Select(o => Convert.ToInt32(o)).ToArray();
+				if (Text.Length < InputIndex)
+					InputIndex = Text.Length;             
 				Text = Text.Insert(InputIndex, GetKeyValueAt(pos[0], pos[1], _shiftIndex));
 				//Text += GetKeyValueAt(pos[0], pos[1], _shiftIndex);
 				InputIndex++;
