@@ -8,13 +8,13 @@ using FoxHornKeyboard.ViewModels;
 namespace FoxHornKeyboard.Controls
 {
 	/// <summary>
-	/// Interaction logic for TextInputWithOnscreenKeyboard.xaml
+	/// Interaction logic for WinFormsTextInputWithOnscreenKeyboard.xaml
 	/// </summary>
-	public partial class TextInputWithOnscreenKeyboard : UserControl
+	public partial class WinFormsTextInputWithOnscreenKeyboard : UserControl
 	{
 		public event EventHandler<KeyboardSearchEventArgs> SearchTermReady;
 
-		public TextInputWithOnscreenKeyboard()
+		public WinFormsTextInputWithOnscreenKeyboard()
 		{
 			InitializeComponent();
 
@@ -43,7 +43,7 @@ namespace FoxHornKeyboard.Controls
 		#region IsNumeric 
 
 		public static readonly DependencyProperty IsNumericProperty =
-			DependencyProperty.Register("IsNumeric", typeof(bool), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(IsNumericProperty_ChangedCallback));
+			DependencyProperty.Register("IsNumeric", typeof(bool), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(IsNumericProperty_ChangedCallback));
 
 		public bool IsNumeric
 		{
@@ -54,17 +54,17 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for IsNumeric
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its IsNumeric property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its IsNumeric property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void IsNumericProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 			element.OnIsNumericChanged(e);
 
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle IsNumeric changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle IsNumeric changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnIsNumericChanged(DependencyPropertyChangedEventArgs e)
@@ -78,7 +78,7 @@ namespace FoxHornKeyboard.Controls
 		#region AllowDecimalPoint 
 
 		public static readonly DependencyProperty AllowDecimalPointProperty =
-			DependencyProperty.Register("AllowDecimalPoint", typeof(bool), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(AllowDecimalPointProperty_ChangedCallback));
+			DependencyProperty.Register("AllowDecimalPoint", typeof(bool), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(AllowDecimalPointProperty_ChangedCallback));
 
 		public bool AllowDecimalPoint
 		{
@@ -89,16 +89,16 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for AllowDecimalPoint
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its AllowDecimalPoint property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its AllowDecimalPoint property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void AllowDecimalPointProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 			element.OnAllowDecimalPointChanged(e);
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle AllowDecimalPoint changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle AllowDecimalPoint changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnAllowDecimalPointChanged(DependencyPropertyChangedEventArgs e)
@@ -112,7 +112,7 @@ namespace FoxHornKeyboard.Controls
 		#region Value 
 
 		public static readonly DependencyProperty ValueProperty =
-			DependencyProperty.Register("Value", typeof(string), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(ValueProperty_ChangedCallback));
+			DependencyProperty.Register("Value", typeof(string), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(ValueProperty_ChangedCallback));
 
 		public string Value
 		{
@@ -123,17 +123,17 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for Value
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its Value property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its Value property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void ValueProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 
 			element.OnValueChanged(e);
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle Value changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle Value changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
@@ -145,7 +145,7 @@ namespace FoxHornKeyboard.Controls
 		#region FinishedCommand 
 
 		public static readonly DependencyProperty FinishedCommandProperty =
-			DependencyProperty.Register("FinishedCommand", typeof(ICommand), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(FinishedCommandProperty_ChangedCallback));
+			DependencyProperty.Register("FinishedCommand", typeof(ICommand), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(FinishedCommandProperty_ChangedCallback));
 
 		public ICommand FinishedCommand
 		{
@@ -156,16 +156,16 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for FinishedCommand
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its FinishedCommand property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its FinishedCommand property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void FinishedCommandProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 			element.OnFinishedCommandChanged(e);
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle FinishedCommand changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle FinishedCommand changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnFinishedCommandChanged(DependencyPropertyChangedEventArgs e)
@@ -178,7 +178,7 @@ namespace FoxHornKeyboard.Controls
 		#region NextFieldCommand 
 
 		public static readonly DependencyProperty NextFieldCommandProperty =
-			DependencyProperty.Register("NextFieldCommand", typeof(ICommand), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(NextFieldCommandProperty_ChangedCallback));
+			DependencyProperty.Register("NextFieldCommand", typeof(ICommand), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(NextFieldCommandProperty_ChangedCallback));
 
 		public ICommand NextFieldCommand
 		{
@@ -189,16 +189,16 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for NextFieldCommand
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its NextFieldCommand property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its NextFieldCommand property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void NextFieldCommandProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 			element.OnNextFieldCommandChanged(e);
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle NextFieldCommand changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle NextFieldCommand changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnNextFieldCommandChanged(DependencyPropertyChangedEventArgs e)
@@ -211,7 +211,7 @@ namespace FoxHornKeyboard.Controls
 		#region IsAutoCompleteMode 
 
 		public static readonly DependencyProperty IsAutoCompleteModeProperty =
-			DependencyProperty.Register("IsAutoCompleteMode", typeof(bool), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(IsAutoCompleteModeProperty_ChangedCallback));
+			DependencyProperty.Register("IsAutoCompleteMode", typeof(bool), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(IsAutoCompleteModeProperty_ChangedCallback));
 
 		public bool IsAutoCompleteMode
 		{
@@ -222,17 +222,17 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for IsAutoCompleteMode
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its IsAutoCompleteMode property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its IsAutoCompleteMode property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void IsAutoCompleteModeProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 
 			element.OnIsAutoCompleteModeChanged(e);
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle IsAutoCompleteMode changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle IsAutoCompleteMode changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnIsAutoCompleteModeChanged(DependencyPropertyChangedEventArgs e)
@@ -245,7 +245,7 @@ namespace FoxHornKeyboard.Controls
 		#region LoadAutoCompleteData 
 
 		public static readonly DependencyProperty LoadAutoCompleteDataProperty =
-			DependencyProperty.Register("LoadAutoCompleteData", typeof(ICommand), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(LoadAutoCompleteDataProperty_ChangedCallback));
+			DependencyProperty.Register("LoadAutoCompleteData", typeof(ICommand), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(LoadAutoCompleteDataProperty_ChangedCallback));
 
 		public ICommand LoadAutoCompleteData
 		{
@@ -256,16 +256,16 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for LoadAutoCompleteData
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its LoadAutoCompleteData property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its LoadAutoCompleteData property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void LoadAutoCompleteDataProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 			element.OnLoadAutoCompleteDataChanged(e);
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle LoadAutoCompleteData changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle LoadAutoCompleteData changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnLoadAutoCompleteDataChanged(DependencyPropertyChangedEventArgs e)
@@ -278,7 +278,7 @@ namespace FoxHornKeyboard.Controls
 		#region AutoClearOnOpen 
 
 		public static readonly DependencyProperty AutoClearOnOpenProperty =
-			DependencyProperty.Register("AutoClearOnOpen", typeof(bool), typeof(TextInputWithOnscreenKeyboard), new PropertyMetadata(AutoClearOnOpenProperty_ChangedCallback));
+			DependencyProperty.Register("AutoClearOnOpen", typeof(bool), typeof(WinFormsTextInputWithOnscreenKeyboard), new PropertyMetadata(AutoClearOnOpenProperty_ChangedCallback));
 
 		public bool AutoClearOnOpen
 		{
@@ -289,17 +289,17 @@ namespace FoxHornKeyboard.Controls
 		/// <summary>
 		/// DP changed call back for AutoClearOnOpen
 		/// </summary>
-		/// <param name="obj">instance of TextInputWithOnscreenKeyboard that is having its AutoClearOnOpen property changed</param>
+		/// <param name="obj">instance of WinFormsTextInputWithOnscreenKeyboard that is having its AutoClearOnOpen property changed</param>
 		/// <param name="e">the DP changed arguments</param>
 		private static void AutoClearOnOpenProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
-			TextInputWithOnscreenKeyboard element = obj as TextInputWithOnscreenKeyboard;
+			WinFormsTextInputWithOnscreenKeyboard element = obj as WinFormsTextInputWithOnscreenKeyboard;
 
 			element.OnAutoClearOnOpenChanged(e);
 		}
 
 		/// <summary>
-		/// Method will enable classes that derive from TextInputWithOnscreenKeyboard to handle AutoClearOnOpen changes
+		/// Method will enable classes that derive from WinFormsTextInputWithOnscreenKeyboard to handle AutoClearOnOpen changes
 		/// </summary>
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnAutoClearOnOpenChanged(DependencyPropertyChangedEventArgs e)

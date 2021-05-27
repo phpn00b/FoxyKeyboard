@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary 
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
 	xmlns:local="clr-namespace:FoxHornKeyboard.Layouts"
 	xmlns:assets="clr-namespace:FoxHornKeyboard.Assets"
 	xmlns:a="clr-namespace:FoxHornKeyboard.Controls">
+	<!--
 	<ResourceDictionary.MergedDictionaries>
 		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
@@ -52,6 +52,6 @@
 	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, Accent}" Color="#cc0078d7"/>
 	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, Accent4}" Color="#330078d7"/>
 	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, ControlBorder}" Color="#ffcccccc"/>
-
+-->
 	<!--<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, ThemeBackground}"  Color="{StaticResource MahApps.Brushes.Window.Background}" />-->
 </ResourceDictionary>

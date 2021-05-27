@@ -41,9 +41,6 @@
     <Reference Include="ControlzEx, Version=4.0.0.0, Culture=neutral, PublicKeyToken=69f1c32f803d307e, processorArchitecture=MSIL">
       <HintPath>..\packages\ControlzEx.4.4.0\lib\net462\ControlzEx.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro, Version=2.0.0.0, Culture=neutral, PublicKeyToken=51482d6f650b2b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.2.4.5\lib\net47\MahApps.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
@@ -51,8 +48,10 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -65,13 +64,14 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\KeyboardTest\Assets\PathBasedImages.cs">
       <Link>Assets\PathBasedImages.cs</Link>
     </Compile>
-    <Compile Include="..\KeyboardTest\Controls\TextInputWithOnscreenKeyboard.xaml.cs">
-      <Link>Controls\TextInputWithOnscreenKeyboard.xaml.cs</Link>
+    <Compile Include="..\KeyboardTest\Controls\WinFormsTextInputWithOnscreenKeyboard.cs">
+      <Link>Controls\WinFormsTextInputWithOnscreenKeyboard.cs</Link>
     </Compile>
     <Compile Include="..\KeyboardTest\DpiUtilities.cs">
       <Link>DpiUtilities.cs</Link>
@@ -79,11 +79,11 @@
     <Compile Include="..\KeyboardTest\Extensions.cs">
       <Link>Extensions.cs</Link>
     </Compile>
-    <Compile Include="..\KeyboardTest\Layouts\EnglishKeyboardLayout.xaml.cs">
-      <Link>Layouts\EnglishKeyboardLayout.xaml.cs</Link>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\KeyboardTest\Layouts\WinFormsEnglishKeyboardLayout.cs">
+      <Link>Layouts\WinFormsEnglishKeyboardLayout.cs</Link>
+    </Compile>
     <Compile Include="..\KeyboardTest\Model\EnumOption.cs">
       <Link>Model\EnumOption.cs</Link>
     </Compile>
@@ -108,12 +108,41 @@
     <Compile Include="..\KeyboardTest\ViewModels\KeyboardSearchEventArgs.cs">
       <Link>ViewModels\KeyboardSearchEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\KeyboardTest\ViewModels\Languages\EnglishKeyboardViewModel.cs">
-      <Link>ViewModels\Languages\EnglishKeyboardViewModel.cs</Link>
+    <Compile Include="..\KeyboardTest\ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs">
+      <Link>ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs</Link>
     </Compile>
-    <Compile Include="..\KeyboardTest\ViewModels\Languages\SpanishKeyboardViewModel.cs">
-      <Link>ViewModels\Languages\SpanishKeyboardViewModel.cs</Link>
+    <Compile Include="..\KeyboardTest\ViewModels\Languages\SpanishKeyboardLayoutViewModel.cs">
+      <Link>ViewModels\Languages\SpanishKeyboardLayoutViewModel.cs</Link>
     </Compile>
+    <Compile Include="Forms\BaseOnScreenKeyboardInput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\BaseOnScreenKeyboardInput.Designer.cs">
+      <DependentUpon>BaseOnScreenKeyboardInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AutoCompleteTextKeyboardInput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\AutoCompleteTextKeyboardInput.Designer.cs">
+      <DependentUpon>AutoCompleteTextKeyboardInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TextKeyboardInput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\TextKeyboardInput.Designer.cs">
+      <DependentUpon>TextKeyboardInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\NumericKeyboardInput.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\NumericKeyboardInput.Designer.cs">
+      <DependentUpon>NumericKeyboardInput.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ViewModels\AutoCompleteViewModel.cs" />
+    <Compile Include="Forms\ViewModels\BaseWinFormsKeyboardViewModel.cs" />
+    <Compile Include="Forms\ViewModels\ItemPickedEventArgs.cs" />
+    <Compile Include="Forms\ViewModels\TextViewModel.cs" />
+    <Compile Include="Forms\ViewModels\NumericViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -127,6 +156,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Forms\BaseOnScreenKeyboardInput.resx">
+      <DependentUpon>BaseOnScreenKeyboardInput.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -142,13 +174,13 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Page Include="..\KeyboardTest\Controls\TextInputWithOnscreenKeyboard.xaml">
-      <Link>Controls\TextInputWithOnscreenKeyboard.xaml</Link>
+    <Page Include="..\KeyboardTest\Controls\WinFormsTextInputWithOnscreenKeyboard.xaml">
+      <Link>Controls\WinFormsTextInputWithOnscreenKeyboard.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="..\KeyboardTest\Layouts\EnglishKeyboardLayout.xaml">
-      <Link>Layouts\EnglishKeyboardLayout.xaml</Link>
+    <Page Include="..\KeyboardTest\Layouts\WinFormsEnglishKeyboardLayout.xaml">
+      <Link>Layouts\WinFormsEnglishKeyboardLayout.xaml</Link>
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

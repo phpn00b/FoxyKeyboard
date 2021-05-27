@@ -14,7 +14,7 @@
 		<StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
 				<TextBlock Width="200" Text="Label" VerticalAlignment="Center"/>
-				<controls:TextInputWithOnscreenKeyboard Padding="2,2,2,2" IsNumeric="False" />
+				<controls:WinFormsTextInputWithOnscreenKeyboard Padding="2,2,2,2" IsNumeric="False" />
 			</StackPanel>
 		</StackPanel>
 	</Grid>
