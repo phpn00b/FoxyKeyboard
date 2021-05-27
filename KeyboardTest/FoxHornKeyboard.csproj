@@ -6,30 +6,23 @@
 		<UseWPF>true</UseWPF>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<None Remove="Assets\keyboard.png" />
-		<None Remove="Assets\pick-list-item.png" />
-		<None Remove="Assets\xout.png" />
-	</ItemGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>TRACE;MAINPROJ</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>TRACE;MAINPROJ</DefineConstants>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="MahApps.Metro" Version="2.4.5" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Assets\backspace.png" />
-		<Resource Include="Assets\delete.png" />
-		<Resource Include="Assets\end.png" />
-		<Resource Include="Assets\enter.png" />
-		<Resource Include="Assets\erase.png" />
-		<Resource Include="Assets\home.png" />
-		<Resource Include="Assets\keyboard.png" />
-		<Resource Include="Assets\pick-list-item.png" />
-		<Resource Include="Assets\select-all.png" />
-		<Resource Include="Assets\shift.png" />
-		<Resource Include="Assets\start.png" />
-		<Resource Include="Assets\tab.png" />
-		<Resource Include="Assets\xout.png" />
+	  <Page Update="Resources.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Page>
 	</ItemGroup>
 
 </Project>

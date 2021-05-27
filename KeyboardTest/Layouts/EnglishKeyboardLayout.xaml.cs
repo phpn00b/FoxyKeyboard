@@ -1,9 +1,9 @@
-﻿using FoxHornKeyboard.ViewModels;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using FoxHornKeyboard.ViewModels;
 
 namespace FoxHornKeyboard.Layouts
 {
@@ -13,6 +13,9 @@ namespace FoxHornKeyboard.Layouts
 	public partial class EnglishKeyboardLayout : UserControl
 	{
 		public event EventHandler CloseMe;
+
+		public event EventHandler<KeyboardSearchEventArgs> SearchTermReady;
+
 		private BaseKeyboardLayoutViewModel KeyboardViewModel => DataContext as BaseKeyboardLayoutViewModel;
 
 		public EnglishKeyboardLayout()
@@ -23,6 +26,22 @@ namespace FoxHornKeyboard.Layouts
 			binding.UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged;
 			binding.Source = DataContext;
 			SetBinding(EnglishKeyboardLayout.ValueProperty, binding);
+			DataContextChanged += (s, e) =>
+			{
+				if (KeyboardViewModel != null)
+				{
+					KeyboardViewModel.Finished += (se, ea) =>
+					{
+						CloseMe?.Invoke(se, ea);
+					};
+					KeyboardViewModel.SearchTermReady += (se, ea) =>
+					{
+						SearchTermReady?.Invoke(this, ea);
+					};
+					KeyboardViewModel.IsAutoCompleteMode = IsAutoCompleteMode;
+					LoadAutoCompleteData = KeyboardViewModel.LoadAutoCompleteDataCommand;
+				}
+			};
 		}
 
 		#region Value 
@@ -53,7 +72,8 @@ namespace FoxHornKeyboard.Layouts
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnValueChanged(DependencyPropertyChangedEventArgs e)
 		{
-
+			if (KeyboardViewModel != null)
+				KeyboardViewModel.Text = e.NewValue as string;
 		}
 
 		#endregion
@@ -77,8 +97,7 @@ namespace FoxHornKeyboard.Layouts
 		private static void AllowDecimalPointProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
 			EnglishKeyboardLayout element = obj as EnglishKeyboardLayout;
-			if (e.NewValue != null)
-				element.KeyboardViewModel.AllowDecimalPoint = (bool)e.NewValue;
+
 			element.OnAllowDecimalPointChanged(e);
 		}
 
@@ -88,7 +107,9 @@ namespace FoxHornKeyboard.Layouts
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnAllowDecimalPointChanged(DependencyPropertyChangedEventArgs e)
 		{
-
+			if (KeyboardViewModel != null)
+				if (e.NewValue != null)
+					KeyboardViewModel.AllowDecimalPoint = (bool)e.NewValue;
 		}
 
 		#endregion
@@ -112,9 +133,7 @@ namespace FoxHornKeyboard.Layouts
 		private static void IsNumericProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
 			EnglishKeyboardLayout element = obj as EnglishKeyboardLayout;
-			if (e.NewValue != null)
-				if (element.KeyboardViewModel != null)
-					element.KeyboardViewModel.OnlyNumericInputAllowed = (bool)e.NewValue;
+
 			element.OnIsNumericChanged(e);
 		}
 
@@ -124,7 +143,10 @@ namespace FoxHornKeyboard.Layouts
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnIsNumericChanged(DependencyPropertyChangedEventArgs e)
 		{
-
+			if (KeyboardViewModel != null)
+				if (e.NewValue != null)
+					if (KeyboardViewModel != null)
+						KeyboardViewModel.OnlyNumericInputAllowed = (bool)e.NewValue;
 		}
 
 		#endregion
@@ -158,7 +180,8 @@ namespace FoxHornKeyboard.Layouts
 		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
 		protected virtual void OnFinishedCommandChanged(DependencyPropertyChangedEventArgs e)
 		{
-
+			if (KeyboardViewModel != null)
+				KeyboardViewModel.FinishedCommand = e.NewValue as ICommand;
 		}
 
 		#endregion
@@ -197,9 +220,122 @@ namespace FoxHornKeyboard.Layouts
 
 		#endregion
 
+		#region IsAutoCompleteMode 
+
+		public static readonly DependencyProperty IsAutoCompleteModeProperty =
+			DependencyProperty.Register("IsAutoCompleteMode", typeof(bool), typeof(EnglishKeyboardLayout), new PropertyMetadata(IsAutoCompleteModeProperty_ChangedCallback));
+
+		public bool IsAutoCompleteMode
+		{
+			get => (bool)GetValue(IsAutoCompleteModeProperty);
+			set => SetValue(IsAutoCompleteModeProperty, value);
+		}
+
+		/// <summary>
+		/// DP changed call back for IsAutoCompleteMode
+		/// </summary>
+		/// <param name="obj">instance of EnglishKeyboardLayout that is having its IsAutoCompleteMode property changed</param>
+		/// <param name="e">the DP changed arguments</param>
+		private static void IsAutoCompleteModeProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+		{
+			EnglishKeyboardLayout element = obj as EnglishKeyboardLayout;
+
+			element.OnIsAutoCompleteModeChanged(e);
+		}
+
+		/// <summary>
+		/// Method will enable classes that derive from EnglishKeyboardLayout to handle IsAutoCompleteMode changes
+		/// </summary>
+		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
+		protected virtual void OnIsAutoCompleteModeChanged(DependencyPropertyChangedEventArgs e)
+		{
+			if (KeyboardViewModel != null)
+				if (e.NewValue != null)
+					KeyboardViewModel.IsAutoCompleteMode = (bool)e.NewValue;
+		}
+
+		#endregion
+
+		#region LoadAutoCompleteData 
+
+		public static readonly DependencyProperty LoadAutoCompleteDataProperty =
+			DependencyProperty.Register("LoadAutoCompleteData", typeof(ICommand), typeof(EnglishKeyboardLayout), new PropertyMetadata(LoadAutoCompleteDataProperty_ChangedCallback));
+
+		public ICommand LoadAutoCompleteData
+		{
+			get => (ICommand)GetValue(LoadAutoCompleteDataProperty);
+			set => SetValue(LoadAutoCompleteDataProperty, value);
+		}
+
+		/// <summary>
+		/// DP changed call back for LoadAutoCompleteData
+		/// </summary>
+		/// <param name="obj">instance of EnglishKeyboardLayout that is having its LoadAutoCompleteData property changed</param>
+		/// <param name="e">the DP changed arguments</param>
+		private static void LoadAutoCompleteDataProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+		{
+			EnglishKeyboardLayout element = obj as EnglishKeyboardLayout;
+
+			element.OnLoadAutoCompleteDataChanged(e);
+		}
+
+		/// <summary>
+		/// Method will enable classes that derive from EnglishKeyboardLayout to handle LoadAutoCompleteData changes
+		/// </summary>
+		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
+		protected virtual void OnLoadAutoCompleteDataChanged(DependencyPropertyChangedEventArgs e)
+		{
+
+		}
+
+		#endregion
+
+		#region AutoClearOnOpen 
+
+		public static readonly DependencyProperty AutoClearOnOpenProperty =
+			DependencyProperty.Register("AutoClearOnOpen", typeof(bool), typeof(EnglishKeyboardLayout), new PropertyMetadata(AutoClearOnOpenProperty_ChangedCallback));
+
+		public bool AutoClearOnOpen
+		{
+			get { return (bool)GetValue(AutoClearOnOpenProperty); }
+			set { SetValue(AutoClearOnOpenProperty, value); }
+		}
+
+		/// <summary>
+		/// DP changed call back for AutoClearOnOpen
+		/// </summary>
+		/// <param name="obj">instance of EnglishKeyboardLayout that is having its AutoClearOnOpen property changed</param>
+		/// <param name="e">the DP changed arguments</param>
+		private static void AutoClearOnOpenProperty_ChangedCallback(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+		{
+			EnglishKeyboardLayout element = obj as EnglishKeyboardLayout;
+
+			element.OnAutoClearOnOpenChanged(e);
+		}
+
+		/// <summary>
+		/// Method will enable classes that derive from EnglishKeyboardLayout to handle AutoClearOnOpen changes
+		/// </summary>
+		/// <param name="e">the DP changed arguments passed in to the DP changed callback</param>
+		protected virtual void OnAutoClearOnOpenChanged(DependencyPropertyChangedEventArgs e)
+		{
+			if (KeyboardViewModel != null)
+				if (e.NewValue != null)
+					KeyboardViewModel.AutoClearOnOpen = (bool)e.NewValue;
+		}
+
+		#endregion
+
 		private void closeButton_Click(object sender, RoutedEventArgs e)
 		{
 			CloseMe?.Invoke(this, EventArgs.Empty);
+		}
+
+		private void Freezable_OnChanged(object sender, EventArgs e)
+		{
+			var freezable = sender as Freezable;
+			if (freezable?.CanFreeze ?? false)
+				freezable.Freeze();
 		}
 	}
 }

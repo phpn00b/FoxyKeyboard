@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net5.0-windows</TargetFramework>
@@ -7,33 +7,35 @@
 		<RootNamespace>FoxHornKeyboard</RootNamespace>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>TRACE;LIBCORE</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>TRACE;LIBCORE</DefineConstants>
+	</PropertyGroup>
+
 	<ItemGroup>
+		<Compile Include="..\KeyboardTest\Assets\PathBasedImages.cs" Link="Assets\PathBasedImages.cs" />
 		<Compile Include="..\KeyboardTest\Controls\TextInputWithOnscreenKeyboard.xaml.cs" Link="Controls\TextInputWithOnscreenKeyboard.xaml.cs" />
 		<Compile Include="..\KeyboardTest\DpiUtilities.cs" Link="DpiUtilities.cs" />
+		<Compile Include="..\KeyboardTest\Extensions.cs" Link="Extensions.cs" />
 		<Compile Include="..\KeyboardTest\Layouts\EnglishKeyboardLayout.xaml.cs" Link="Layouts\EnglishKeyboardLayout.xaml.cs" />
+		<Compile Include="..\KeyboardTest\Model\EnumOption.cs" Link="Model\EnumOption.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\BaseKeyboardInteractionViewModel.cs" Link="ViewModels\BaseKeyboardInteractionViewModel.cs" />
 		<Compile Include="..\KeyboardTest\ViewModels\BaseKeyboardLayoutViewModel.cs" Link="ViewModels\BaseKeyboardLayoutViewModel.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\BaseTypedKeyboardInteractionViewModel.cs" Link="ViewModels\BaseTypedKeyboardInteractionViewModel.cs" />
 		<Compile Include="..\KeyboardTest\ViewModels\BaseViewModel.cs" Link="ViewModels\BaseViewModel.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\DpiUtilities.cs" Link="ViewModels\DpiUtilities.cs" />
 		<Compile Include="..\KeyboardTest\ViewModels\GenericCommand.cs" Link="ViewModels\GenericCommand.cs" />
-		<Compile Include="..\KeyboardTest\ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs" Link="ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\KeyboardSearchEventArgs.cs" Link="ViewModels\KeyboardSearchEventArgs.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\Languages\EnglishKeyboardViewModel.cs" Link="ViewModels\Languages\EnglishKeyboardViewModel.cs" />
+		<Compile Include="..\KeyboardTest\ViewModels\Languages\SpanishKeyboardViewModel.cs" Link="ViewModels\Languages\SpanishKeyboardViewModel.cs" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="Assets\" />
+		<Folder Include="Model\" />
 		</ItemGroup>
-	<ItemGroup>
-		<Resource Include="..\KeyboardTest\Assets\backspace.png" Link="Assets\backspace.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\delete.png" Link="Assets\delete.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\end.png" Link="Assets\end.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\enter.png" Link="Assets\enter.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\erase.png" Link="Assets\erase.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\home.png" Link="Assets\home.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\keyboard.png" Link="Assets\keyboard.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\pick-list-item.png" Link="Assets\pick-list-item.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\select-all.png" Link="Assets\select-all.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\shift.png" Link="Assets\shift.png" />
-		<Resource Include="..\KeyboardTest\Assets\start.png" Link="Assets\start.png" />
-		<Resource Include="..\KeyboardTest\Assets\tab.png" Link="Assets\tab.png" />
-		<EmbeddedResource Include="..\KeyboardTest\Assets\xout.png" Link="Assets\xout.png" />
-	</ItemGroup>
 <!--
 	<ItemGroup>
 		<Folder Include="Assets\" />

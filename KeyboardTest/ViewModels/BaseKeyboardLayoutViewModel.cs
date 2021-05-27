@@ -1,212 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using FoxHornKeyboard.Model;
+using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Timers;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using Timer = System.Timers.Timer;
 
 namespace FoxHornKeyboard.ViewModels
 {
 	public abstract class BaseKeyboardLayoutViewModel : BaseViewModel
 	{
+		private const char MaskChar = '█';
+
+		private int _shiftIndex;
+		private bool _selectionIsVisible;
+		private int _selectedKeysNumber = 1;
+
+		private readonly DpiScale _dipInfo;
+		private readonly Typeface _typeface;
+		private readonly FontFamily _fontFamily;
+		private readonly double _selectionCharWidth;
+		private readonly double _selectionCharHeight;
+
+		private readonly Timer _timer = new Timer(700);
 		private readonly SolidColorBrush _visibleSelectionBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(50, 0, 120, 215));
 		private readonly SolidColorBrush _blinkSelectionBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(20, 0, 120, 215));
-		protected static readonly string[][][] SpanishKeyMap = new[]
-		{
-			new string[][]
-			{
-				new string[] {"\\"},
-				new string[] {"1", "!", "|"},
-				new string[] {"2", "\"", "@"},
-				new string[] {"3", ".", "#"},
-				new string[] {"4", "$"},
-				new string[] {"5", "%"},
-				new string[] {"6", "&"},
-				new string[] {"7", "/"},
-				new string[] {"8", "("},
-				new string[] {"9", ")"},
-				new string[] {"0", "="},
-				new string[] {"'", "?"},
-				new string[] {"¡", "¿"},
-				new string[] {"BACKSPACE"}
-			},
-			new string[][]
-			{
-				new string[] {"TAB"},
-				new string[] {"q", "Q"},
-				new string[] {"w", "W"},
-				new string[] {"e", "E"},
-				new string[] {"r", "R"},
-				new string[] {"t", "T"},
-				new string[] {"y", "Y"},
-				new string[] {"u", "U"},
-				new string[] {"i", "I"},
-				new string[] {"o", "O"},
-				new string[] {"p", "P"},
-				new string[] {"`", "^", "["},
-				new string[] {"+", "*", "]"},
-				new string[] {"ENTER"},
-			},
-			new string[][]
-			{
-				new string[] {"CAP-LOCK"},
-				new string[] {"a", "A"},
-				new string[] {"s", "S"},
-				new string[] {"d", "D"},
-				new string[] {"f", "F"},
-				new string[] {"g", "G"},
-				new string[] {"h", "H"},
-				new string[] {"j", "J"},
-				new string[] {"k", "K"},
-				new string[] {"l", "L"},
-				new string[] {"ñ", "Ñ"},
-				new string[] {"´", "¨", "{"},
-				new string[] {"Ç", "}"},
-			},
-			new string[][]
-			{
-				new string[] {"SHIFT"},
-				new string[] {"<", ">"},
-				new string[] {"z", "Z"},
-				new string[] {"x", "X"},
-				new string[] {"c", "C"},
-				new string[] {"v", "V"},
-				new string[] {"b", "B"},
-				new string[] {"n", "N"},
-				new string[] {"m", "M"},
-				new string[] {",", ";"},
-				new string[] {".", ":"},
-				new string[] {"-", "_"},
-				new string[] {"SHIFT"}
-			},
-			new string[][]
-			{
-				new string[] {"CTRL","CTRL","CTRL"},
-				new string[] {"","",""},
-				new string[] {"ALT","ALT","ALT"},
-				new string[] {"SPACE","SPACE","SPACE"},
-				new string[] {"ALT GR","ALT GR","ALT GR"},
-				new string[] {"","",""},
-				new string[] {"","",""},
-				new string[] {"CTRL","CTRL","CTRL"},
-			}
-		};
-
-		protected static readonly string[][][] EnglishKeyMap = new[]
-		{
-			new string[][]
-			{
-				new string[] {"`","~"},
-				new string[] {"1", "!"},
-				new string[] {"2", "@"},
-				new string[] {"3", "#"},
-				new string[] {"4", "$"},
-				new string[] {"5", "%"},
-				new string[] {"6", "^"},
-				new string[] {"7", "&"},
-				new string[] {"8", "*"},
-				new string[] {"9", "("},
-				new string[] {"0", ")"},
-				new string[] {"-", "_"},
-				new string[] {"=", "+"},
-				new string[] {"BACKSPACE"}
-			},
-			new string[][]
-			{
-				new string[] {"TAB"},
-				new string[] {"q", "Q"},
-				new string[] {"w", "W"},
-				new string[] {"e", "E"},
-				new string[] {"r", "R"},
-				new string[] {"t", "T"},
-				new string[] {"y", "Y"},
-				new string[] {"u", "U"},
-				new string[] {"i", "I"},
-				new string[] {"o", "O"},
-				new string[] {"p", "P"},
-				new string[] {"[", "["},
-				new string[] {"]", "]"},
-				new string[] {"\\","|"},
-			},
-			new string[][]
-			{
-				new string[] {"CAP-LOCK"},
-				new string[] {"a", "A"},
-				new string[] {"s", "S"},
-				new string[] {"d", "D"},
-				new string[] {"f", "F"},
-				new string[] {"g", "G"},
-				new string[] {"h", "H"},
-				new string[] {"j", "J"},
-				new string[] {"k", "K"},
-				new string[] {"l", "L"},
-				new string[] {";", ":"},
-				new string[] {"'", "\""},
-				new string[] {"ENTER"},
-			},
-			new string[][]
-			{
-				new string[] {"SHIFT"},
-
-				new string[] {"z", "Z"},
-				new string[] {"x", "X"},
-				new string[] {"c", "C"},
-				new string[] {"v", "V"},
-				new string[] {"b", "B"},
-				new string[] {"n", "N"},
-				new string[] {"m", "M"},
-				new string[] {",", "<"},
-				new string[] {".", ">"},
-				new string[] {"/", "?"},
-				new string[] {"SHIFT"}
-			},
-			new string[][]
-			{
-				new string[] {""},
-				new string[] {""},
-				new string[] {""},
-				new string[] {"SPACE"},
-				new string[] {""},
-				new string[] {""},
-				new string[] {""},
-				new string[] {""},
-			}
-		};
 
 		public string[][][] ActiveKeyMap { get; protected set; }
-		private readonly FontFamily _fontFamily;
-		private readonly Typeface _typeface;
-		private readonly double _selectionCharHeight;
-		private readonly double _selectionCharWidth;
-		private readonly DpiScale _dipInfo;
-		private readonly Timer _timer = new Timer(700);
-		private bool _selectionIsVisible;
 
-
-		#region HasResults Property
-
-		private bool _hasResults;
-
-		public bool HasResults
-		{
-			get { return _hasResults; }
-			set
-			{
-				if (_hasResults != value)
-				{
-					_hasResults = value;
-					OnPropertyChanged("HasResults");
-					ShowResultsCommand.UpdateCanExecuteState();
-				}
-			}
-		}
-
-		#endregion
+		public event EventHandler<KeyboardSearchEventArgs> SearchTermReady;
+		public event EventHandler<EventArgs> Finished;
 
 		private void SetupFakeResults()
 		{
@@ -219,12 +44,6 @@ namespace FoxHornKeyboard.ViewModels
 					Value = i
 				});
 			}
-		}
-
-		public class EnumOption
-		{
-			public string Name { get; set; }
-			public object Value { get; set; }
 		}
 
 		public ObservableCollection<EnumOption> Results { get; } = new ObservableCollection<EnumOption>();
@@ -251,6 +70,7 @@ namespace FoxHornKeyboard.ViewModels
 				_selectionCharHeight = size.Height + 4;
 				KeyboardVisibility = Visibility.Visible;
 				ResultsVisibility = Visibility.Collapsed;
+				NumberPadVisibility = Visibility.Collapsed;
 			}
 			else
 			{
@@ -265,6 +85,7 @@ namespace FoxHornKeyboard.ViewModels
 
 			SelectionHeight = _selectionCharHeight;
 			SelectionWidth = _selectionCharWidth;
+			LoadAutoCompleteDataCommand = new GenericCommand(o => true, ProcessAutoCompleteResults);
 			KeyPressCommand = new GenericCommand(o => CheckKeyAllowed(o as string), PressKey);
 			TabCommand = new GenericCommand(o => true, OnTabPress);
 			EnterCommand = new GenericCommand(o => true, OnEnterPress);
@@ -273,9 +94,9 @@ namespace FoxHornKeyboard.ViewModels
 			UpArrowCommand = new GenericCommand(o => true, OnUpArrowPress);
 			DownArrowCommand = new GenericCommand(o => true, OnDownArrowPress);
 			RightArrowCommand = new GenericCommand(o => InputIndex < Text?.Length, OnRightArrowPress);
-			LeftArrowCommand = new GenericCommand(o => InputIndex > 0, OnLeftArrowPress);
+			LeftArrowCommand = new GenericCommand(o => InputIndex > 0 || _selectedKeysNumber > 1, OnLeftArrowPress);
 			HomeCommand = new GenericCommand(o => InputIndex > 0, OnHomePress);
-			EndCommand = new GenericCommand(o => InputIndex < Text?.Length, OnEndPress);
+			EndCommand = new GenericCommand(o => InputIndex <= Text?.Length, OnEndPress);
 			PageUpCommand = new GenericCommand(o => true, OnPageUpPress);
 			PageDownCommand = new GenericCommand(o => true, OnPageDownPress);
 			SpaceCommand = new GenericCommand(o => true, OnSpaceBarPress);
@@ -288,23 +109,44 @@ namespace FoxHornKeyboard.ViewModels
 			ActiveKeyMap = EnglishKeyMap;
 			ChangeKeys();
 			SetSelectionPosition();
-
 		}
 
-		private void ShowResults(object obj)
+		private void ProcessAutoCompleteResults(object obj)
 		{
+			var results = obj as EnumOption[];
+			if (results != null)
+			{
+				UiDispatcher.Invoke(() =>
+				{
+					Results.Clear();
+					foreach (var result in results)
+					{
+						Results.Add(result);
+					}
 
-
+					ResultsVisibility = Visibility.Visible;
+					KeyboardVisibility = Visibility.Collapsed;
+				});
+			}
 		}
 
-		private void ShowKeyboard(object obj)
+		public void ShowResults(object obj)
 		{
-			throw new NotImplementedException();
+			ResultsVisibility = Visibility.Visible;
+			KeyboardVisibility = Visibility.Collapsed;
+		}
+
+		public void ShowKeyboard(object obj)
+		{
+			ResultsVisibility = Visibility.Collapsed;
+			KeyboardVisibility = Visibility.Visible;
 		}
 
 		private void PickResultItem(object obj)
 		{
-			throw new NotImplementedException();
+			var item = obj as EnumOption;
+			FinishedCommand.Execute(item);
+			Finished?.Invoke(this, EventArgs.Empty);
 		}
 
 		private void UpdateButtons()
@@ -323,29 +165,6 @@ namespace FoxHornKeyboard.ViewModels
 			ShowKeyboardCommand.UpdateCanExecuteState();
 		}
 
-		#region InputIndex Property
-
-		private int _inputIndex;
-
-		public int InputIndex
-		{
-			get { return _inputIndex; }
-			set
-			{
-				if (value < 0)
-					value = 0;
-				if (_inputIndex != value)
-				{
-					_inputIndex = value;
-					OnPropertyChanged("InputIndex");
-					SetSelectionPosition();
-				}
-			}
-		}
-
-		#endregion
-
-
 		private void SetSelectionPosition()
 		{
 			SelectionX = _inputIndex * _selectionCharWidth + 8;
@@ -356,30 +175,76 @@ namespace FoxHornKeyboard.ViewModels
 			var size = MeasureString(Text);
 			InputIndex = 0;
 			SelectionWidth = size.Width;
+			_selectedKeysNumber = Text.Length;
+			UpdateButtons();
 		}
 
 		private void OnClearInputPress(object obj)
 		{
+			RestartSelectionSize();
 			Text = "";
 			InputIndex = 0;
 		}
 
+		public bool IsAutoCompleteMode { get; set; }
+
 		private void OnEnterPress(object obj)
 		{
-			SetupFakeResults();
+			if (IsAutoCompleteMode)
+			{
+				SearchTermReady?.Invoke(this, new KeyboardSearchEventArgs(Text));
+			}
+			else
+			{
+				FinishedCommand.Execute(Text);
+				Finished?.Invoke(this, EventArgs.Empty);
+			}
+			//SetupFakeResults();
 			UpdateButtons();
 			HasResults = true;
 		}
 
 		private void OnBackspacePress(object obj)
 		{
-			Text = Text.Remove(InputIndex - 1, 1);
-			InputIndex--;
+			var deleteSize = SelectionWidth > 1 ? _selectedKeysNumber : 1;
+
+			if (InputIndex > 0)
+			{
+				Text = Text.Remove(InputIndex - 1, deleteSize);
+				InputIndex--;
+			}
+			else
+			{
+				Text = Text.Remove(0, deleteSize);
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
+		}
+
+		private void RestartSelectionSize(bool restartIndex = true)
+		{
+			if (restartIndex)
+			{
+				InputIndex = 0;
+			}
+			_selectedKeysNumber = 1;
+			SelectionWidth = 5;
 		}
 
 		private void OnDeletePress(object obj)
 		{
-			Text = Text.Remove(InputIndex, 1);
+			if (_selectedKeysNumber > 1)
+			{
+				Text = Text.Remove(InputIndex, _selectedKeysNumber);
+			}
+			else
+			{
+				Text = Text.Remove(InputIndex, 1);
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnUpArrowPress(object obj)
@@ -394,24 +259,45 @@ namespace FoxHornKeyboard.ViewModels
 
 		private void OnRightArrowPress(object obj)
 		{
-			InputIndex++;
+			if (_selectedKeysNumber > 1)
+			{
+				InputIndex = Text.Length;
+			}
+			else
+			{
+				InputIndex++;
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnLeftArrowPress(object obj)
 		{
-			InputIndex--;
+			if (_selectedKeysNumber > 1)
+			{
+				InputIndex = Text.Length - (_selectedKeysNumber);
+			}
+			else
+			{
+				InputIndex--;
+			}
+
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnHomePress(object obj)
 		{
-			InputIndex = 0;
-
+			RestartSelectionSize();
+			UpdateButtons();
 		}
 
 		private void OnEndPress(object obj)
 		{
-			InputIndex = Text.Length - 1;
-
+			InputIndex = Text.Length;
+			RestartSelectionSize(false);
+			UpdateButtons();
 		}
 
 		private void OnPageUpPress(object obj)
@@ -426,8 +312,10 @@ namespace FoxHornKeyboard.ViewModels
 
 		private void OnSpaceBarPress(object obj)
 		{
+			RestartSelectionSize(false);
 			Text += " ";
 			InputIndex++;
+			UpdateButtons();
 		}
 
 		private void OnTabPress(object obj)
@@ -452,39 +340,425 @@ namespace FoxHornKeyboard.ViewModels
 				Text = Text.Insert(InputIndex, args);
 				InputIndex++;
 			}
-
 			//this needs to be at the end
 			if (IsShiftActive && EnableAutoClearShiftAfterKeyPress)
 				IsShiftActive = false;
 
 		}
 
-		#region Text Property
-
-		private string _text = "";
-
-		public string Text
+		public void ActivateShift()
 		{
-			get { return _text; }
+
+		}
+
+		protected void ChangeKeys()
+		{
+			OnPropertyChanged("Position_0_0Display");
+			OnPropertyChanged("Position_0_1Display");
+			OnPropertyChanged("Position_0_2Display");
+			OnPropertyChanged("Position_0_3Display");
+			OnPropertyChanged("Position_0_4Display");
+			OnPropertyChanged("Position_0_5Display");
+			OnPropertyChanged("Position_0_6Display");
+			OnPropertyChanged("Position_0_7Display");
+			OnPropertyChanged("Position_0_8Display");
+			OnPropertyChanged("Position_0_8Display");
+			OnPropertyChanged("Position_0_9Display");
+			OnPropertyChanged("Position_0_10Display");
+			OnPropertyChanged("Position_0_11Display");
+			OnPropertyChanged("Position_0_12Display");
+			OnPropertyChanged("Position_0_13Display");
+			OnPropertyChanged("Position_0_14Display");
+			OnPropertyChanged("Position_0_15Display");
+			OnPropertyChanged("Position_1_0Display");
+			OnPropertyChanged("Position_1_1Display");
+			OnPropertyChanged("Position_1_2Display");
+			OnPropertyChanged("Position_1_3Display");
+			OnPropertyChanged("Position_1_4Display");
+			OnPropertyChanged("Position_1_5Display");
+			OnPropertyChanged("Position_1_6Display");
+			OnPropertyChanged("Position_1_7Display");
+			OnPropertyChanged("Position_1_8Display");
+			OnPropertyChanged("Position_1_9Display");
+			OnPropertyChanged("Position_1_10Display");
+			OnPropertyChanged("Position_1_11Display");
+			OnPropertyChanged("Position_1_12Display");
+			OnPropertyChanged("Position_1_13Display");
+			OnPropertyChanged("Position_1_14Display");
+			OnPropertyChanged("Position_1_15Display");
+			OnPropertyChanged("Position_2_0Display");
+			OnPropertyChanged("Position_2_1Display");
+			OnPropertyChanged("Position_2_2Display");
+			OnPropertyChanged("Position_2_3Display");
+			OnPropertyChanged("Position_2_4Display");
+			OnPropertyChanged("Position_2_5Display");
+			OnPropertyChanged("Position_2_6Display");
+			OnPropertyChanged("Position_2_7Display");
+			OnPropertyChanged("Position_2_8Display");
+			OnPropertyChanged("Position_2_9Display");
+			OnPropertyChanged("Position_2_10Display");
+			OnPropertyChanged("Position_2_11Display");
+			OnPropertyChanged("Position_2_12Display");
+			OnPropertyChanged("Position_2_13Display");
+			OnPropertyChanged("Position_2_14Display");
+			OnPropertyChanged("Position_2_15Display");
+			OnPropertyChanged("Position_3_0Display");
+			OnPropertyChanged("Position_3_1Display");
+			OnPropertyChanged("Position_3_2Display");
+			OnPropertyChanged("Position_3_3Display");
+			OnPropertyChanged("Position_3_4Display");
+			OnPropertyChanged("Position_3_5Display");
+			OnPropertyChanged("Position_3_6Display");
+			OnPropertyChanged("Position_3_7Display");
+			OnPropertyChanged("Position_3_8Display");
+			OnPropertyChanged("Position_3_9Display");
+			OnPropertyChanged("Position_3_10Display");
+			OnPropertyChanged("Position_3_11Display");
+			OnPropertyChanged("Position_3_12Display");
+			OnPropertyChanged("Position_3_13Display");
+			OnPropertyChanged("Position_3_14Display");
+			OnPropertyChanged("Position_3_15Display");
+			KeyPressCommand.UpdateCanExecuteState();
+		}
+
+		protected object GetKeyDisplayAt(int row, int column, int shiftIndex)
+		{
+			if (row < ActiveKeyMap.Length)
+			{
+				if (column < ActiveKeyMap[row].Length)
+				{
+					if (shiftIndex < ActiveKeyMap[row][column].Length)
+					{
+						return ActiveKeyMap[row][column][shiftIndex];
+					}
+					return ActiveKeyMap[row][column][0];
+				}
+			}
+			return string.Empty;
+		}
+		protected string GetKeyValueAt(int row, int column, int shiftIndex)
+		{
+			if (row < ActiveKeyMap.Length)
+				if (column < ActiveKeyMap[row].Length)
+					if (shiftIndex < ActiveKeyMap[row][column].Length)
+						return ActiveKeyMap[row][column][shiftIndex];
+			return null;
+		}
+
+		private void UpdateShiftIndex()
+		{
+			if (IsCapLockActive)
+				_shiftIndex = IsShiftActive ? 0 : 1;
+			else
+				_shiftIndex = IsShiftActive ? 1 : 0;
+			KeyPressCommand.UpdateCanExecuteState();
+		}
+
+		protected bool CheckKeyAllowed(string value)
+		{
+			if (value == null)
+				return true;
+			if (!OnlyNumericInputAllowed)
+				return true;
+			if (AllowDecimalPoint && value == ".")
+				return true;
+			if (value.Length > 2)
+			{
+				var pos = value.Split('|').Select(o => Convert.ToInt32(o)).ToArray();
+				if (pos.Length == 2)
+				{
+					var key = GetKeyValueAt(pos[0], pos[1], _shiftIndex);
+					if (string.IsNullOrWhiteSpace(key))
+						return false;
+					return Char.IsDigit(key.First());
+				}
+			}
+			return Char.IsDigit(value.First());
+		}
+
+		private Size MeasureString(string candidate)
+		{
+			var formattedText = new FormattedText(candidate, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, _typeface, 24, Brushes.Black, _dipInfo.PixelsPerDip);
+			return new Size(formattedText.Width, formattedText.Height);
+		}
+
+		#region SelectionX Property
+
+		private double _selectionX = 12;
+
+		public double SelectionX
+		{
+			get { return _selectionX; }
 			set
 			{
-				if (_text != value)
+				if (_selectionX != value)
 				{
-					_text = value;
-					OnPropertyChanged("Text");
-					UpdateButtons();
+					_selectionX = value;
+					OnPropertyChanged("SelectionX");
 				}
 			}
 		}
 
 		#endregion
 
-		public void ActivateShift()
-		{
+		#region SelectionY Property
 
+		private double _selectionY = 2;
+
+		public double SelectionY
+		{
+			get { return _selectionY; }
+			set
+			{
+				if (_selectionY != value)
+				{
+					_selectionY = value;
+					OnPropertyChanged("SelectionY");
+				}
+			}
 		}
 
-		private int _shiftIndex;
+		#endregion
+
+		#region SelectionHeight Property
+
+		private double _selectionHeight = 36;
+
+		public double SelectionHeight
+		{
+			get { return _selectionHeight; }
+			set
+			{
+				if (_selectionHeight != value)
+				{
+					_selectionHeight = value;
+					OnPropertyChanged("SelectionHeight");
+				}
+			}
+		}
+
+		#endregion
+
+		#region SelectionWidth Property
+
+		private double _selectionWidth = 5;
+
+		public double SelectionWidth
+		{
+			get { return _selectionWidth; }
+			set
+			{
+				if (_selectionWidth != value)
+				{
+					_selectionWidth = value;
+					OnPropertyChanged("SelectionWidth");
+				}
+			}
+		}
+
+		#endregion
+
+		#region SelectionBrush Property
+
+		private Brush _selectionBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(40, 0, 120, 215));
+
+		public Brush SelectionBrush
+		{
+			get { return _selectionBrush; }
+			set
+			{
+				if (_selectionBrush != value)
+				{
+					_selectionBrush = value;
+					OnPropertyChanged("SelectionBrush");
+				}
+			}
+		}
+
+		public bool AutoClearOnOpen { get; set; }
+
+		#endregion
+
+		#region NumberPadVisibility Property
+
+		private Visibility _numberPadVisibility = Visibility.Visible;
+
+		public Visibility NumberPadVisibility
+		{
+			get { return _numberPadVisibility; }
+			set
+			{
+				if (_numberPadVisibility != value)
+				{
+					_numberPadVisibility = value;
+					OnPropertyChanged("NumberPadVisibility");
+				}
+			}
+		}
+
+		#endregion
+
+		#region FullKeyboardVisibility Property
+
+		private Visibility _fullKeyboardVisibility = Visibility.Visible;
+
+		public Visibility FullKeyboardVisibility
+		{
+			get { return _fullKeyboardVisibility; }
+			set
+			{
+				if (_fullKeyboardVisibility != value)
+				{
+					_fullKeyboardVisibility = value;
+					OnPropertyChanged("FullKeyboardVisibility");
+				}
+			}
+		}
+
+		#endregion
+
+		#region KeyboardWidth Property
+
+		private double _keyboardWidth = 1800;
+
+		public double KeyboardWidth
+		{
+			get { return _keyboardWidth; }
+			set
+			{
+				if (_keyboardWidth != value)
+				{
+					_keyboardWidth = value;
+					OnPropertyChanged("KeyboardWidth");
+				}
+			}
+		}
+
+		#endregion
+
+		#region OnlyNumericInputAllowed Property
+
+		private bool _onlyNumericInputAllowed;
+
+		public bool OnlyNumericInputAllowed
+		{
+			get { return _onlyNumericInputAllowed; }
+			set
+			{
+				if (_onlyNumericInputAllowed != value)
+				{
+					_onlyNumericInputAllowed = value;
+					OnPropertyChanged("OnlyNumericInputAllowed");
+					KeyboardWidth = value ? 550 : 1800;
+					FullKeyboardVisibility = value ? Visibility.Collapsed : Visibility.Visible;
+					NumberPadVisibility = value ? Visibility.Visible : Visibility.Collapsed;
+					KeyPressCommand.UpdateCanExecuteState();
+				}
+			}
+		}
+
+		#endregion
+
+		#region KeyboardVisibility Property
+
+		private Visibility _keyboardVisibility = Visibility.Visible;
+
+		public Visibility KeyboardVisibility
+		{
+			get { return _keyboardVisibility; }
+			set
+			{
+				if (_keyboardVisibility != value)
+				{
+					_keyboardVisibility = value;
+					OnPropertyChanged("KeyboardVisibility");
+				}
+			}
+		}
+
+		#endregion
+
+		#region ResultsVisibility Property
+
+		private Visibility _resultsVisibility = Visibility.Collapsed;
+
+		public Visibility ResultsVisibility
+		{
+			get { return _resultsVisibility; }
+			set
+			{
+				if (_resultsVisibility != value)
+				{
+					_resultsVisibility = value;
+					OnPropertyChanged("ResultsVisibility");
+				}
+			}
+		}
+
+		#endregion
+
+		#region AllowDecimalPoint Property
+
+		private bool _allowDecimalPoint;
+
+		public bool AllowDecimalPoint
+		{
+			get { return _allowDecimalPoint; }
+			set
+			{
+				if (_allowDecimalPoint != value)
+				{
+					_allowDecimalPoint = value;
+					OnPropertyChanged("AllowDecimalPoint");
+					KeyPressCommand.UpdateCanExecuteState();
+				}
+			}
+		}
+
+		#endregion
+
+		#region IsShiftActive Property
+
+		private bool _isShiftActive;
+
+		public bool IsShiftActive
+		{
+			get { return _isShiftActive; }
+			set
+			{
+				if (_isShiftActive != value)
+				{
+					_isShiftActive = value;
+					OnPropertyChanged("IsShiftActive");
+					UpdateShiftIndex();
+					ChangeKeys();
+				}
+			}
+		}
+
+		#endregion
+
+		#region IsCapLockActive Property
+
+		private bool _isCapLockActive;
+
+		public bool IsCapLockActive
+		{
+			get { return _isCapLockActive; }
+			set
+			{
+				if (_isCapLockActive != value)
+				{
+					_isCapLockActive = value;
+					OnPropertyChanged("IsCapLockActive");
+					UpdateShiftIndex();
+					ChangeKeys();
+				}
+			}
+		}
+
+		#endregion
+
 		#region Position_0_0 Properties
 		public object Position_0_0Display => GetKeyDisplayAt(0, 0, _shiftIndex);
 
@@ -866,155 +1140,8 @@ namespace FoxHornKeyboard.ViewModels
 		#region Position_3_15 Properties
 		public object Position_3_15Display => GetKeyDisplayAt(3, 15, _shiftIndex);
 
-		protected object GetKeyDisplayAt(int row, int column, int shiftIndex)
-		{
-			if (row < ActiveKeyMap.Length)
-			{
-				if (column < ActiveKeyMap[row].Length)
-				{
-					if (shiftIndex < ActiveKeyMap[row][column].Length)
-					{
-						return ActiveKeyMap[row][column][shiftIndex];
-					}
-					return ActiveKeyMap[row][column][0];
-				}
-			}
-			return string.Empty;
-		}
-
 		public string Position_3_15Value => GetKeyValueAt(3, 15, _shiftIndex);
-
-		protected string GetKeyValueAt(int row, int column, int shiftIndex)
-		{
-			if (row < ActiveKeyMap.Length)
-				if (column < ActiveKeyMap[row].Length)
-					if (shiftIndex < ActiveKeyMap[row][column].Length)
-						return ActiveKeyMap[row][column][shiftIndex];
-			return null;
-		}
-
 		#endregion
-
-		protected void ChangeKeys()
-		{
-			OnPropertyChanged("Position_0_0Display");
-			OnPropertyChanged("Position_0_1Display");
-			OnPropertyChanged("Position_0_2Display");
-			OnPropertyChanged("Position_0_3Display");
-			OnPropertyChanged("Position_0_4Display");
-			OnPropertyChanged("Position_0_5Display");
-			OnPropertyChanged("Position_0_6Display");
-			OnPropertyChanged("Position_0_7Display");
-			OnPropertyChanged("Position_0_8Display");
-			OnPropertyChanged("Position_0_8Display");
-			OnPropertyChanged("Position_0_9Display");
-			OnPropertyChanged("Position_0_10Display");
-			OnPropertyChanged("Position_0_11Display");
-			OnPropertyChanged("Position_0_12Display");
-			OnPropertyChanged("Position_0_13Display");
-			OnPropertyChanged("Position_0_14Display");
-			OnPropertyChanged("Position_0_15Display");
-			OnPropertyChanged("Position_1_0Display");
-			OnPropertyChanged("Position_1_1Display");
-			OnPropertyChanged("Position_1_2Display");
-			OnPropertyChanged("Position_1_3Display");
-			OnPropertyChanged("Position_1_4Display");
-			OnPropertyChanged("Position_1_5Display");
-			OnPropertyChanged("Position_1_6Display");
-			OnPropertyChanged("Position_1_7Display");
-			OnPropertyChanged("Position_1_8Display");
-			OnPropertyChanged("Position_1_9Display");
-			OnPropertyChanged("Position_1_10Display");
-			OnPropertyChanged("Position_1_11Display");
-			OnPropertyChanged("Position_1_12Display");
-			OnPropertyChanged("Position_1_13Display");
-			OnPropertyChanged("Position_1_14Display");
-			OnPropertyChanged("Position_1_15Display");
-			OnPropertyChanged("Position_2_0Display");
-			OnPropertyChanged("Position_2_1Display");
-			OnPropertyChanged("Position_2_2Display");
-			OnPropertyChanged("Position_2_3Display");
-			OnPropertyChanged("Position_2_4Display");
-			OnPropertyChanged("Position_2_5Display");
-			OnPropertyChanged("Position_2_6Display");
-			OnPropertyChanged("Position_2_7Display");
-			OnPropertyChanged("Position_2_8Display");
-			OnPropertyChanged("Position_2_9Display");
-			OnPropertyChanged("Position_2_10Display");
-			OnPropertyChanged("Position_2_11Display");
-			OnPropertyChanged("Position_2_12Display");
-			OnPropertyChanged("Position_2_13Display");
-			OnPropertyChanged("Position_2_14Display");
-			OnPropertyChanged("Position_2_15Display");
-			OnPropertyChanged("Position_3_0Display");
-			OnPropertyChanged("Position_3_1Display");
-			OnPropertyChanged("Position_3_2Display");
-			OnPropertyChanged("Position_3_3Display");
-			OnPropertyChanged("Position_3_4Display");
-			OnPropertyChanged("Position_3_5Display");
-			OnPropertyChanged("Position_3_6Display");
-			OnPropertyChanged("Position_3_7Display");
-			OnPropertyChanged("Position_3_8Display");
-			OnPropertyChanged("Position_3_9Display");
-			OnPropertyChanged("Position_3_10Display");
-			OnPropertyChanged("Position_3_11Display");
-			OnPropertyChanged("Position_3_12Display");
-			OnPropertyChanged("Position_3_13Display");
-			OnPropertyChanged("Position_3_14Display");
-			OnPropertyChanged("Position_3_15Display");
-			KeyPressCommand.UpdateCanExecuteState();
-		}
-
-		#region IsShiftActive Property
-
-		private bool _isShiftActive;
-
-		public bool IsShiftActive
-		{
-			get { return _isShiftActive; }
-			set
-			{
-				if (_isShiftActive != value)
-				{
-					_isShiftActive = value;
-					OnPropertyChanged("IsShiftActive");
-					UpdateShiftIndex();
-					ChangeKeys();
-				}
-			}
-		}
-
-		#endregion
-
-		#region IsCapLockActive Property
-
-		private bool _isCapLockActive;
-
-		public bool IsCapLockActive
-		{
-			get { return _isCapLockActive; }
-			set
-			{
-				if (_isCapLockActive != value)
-				{
-					_isCapLockActive = value;
-					OnPropertyChanged("IsCapLockActive");
-					UpdateShiftIndex();
-					ChangeKeys();
-				}
-			}
-		}
-
-		#endregion
-
-		private void UpdateShiftIndex()
-		{
-			if (IsCapLockActive)
-				_shiftIndex = IsShiftActive ? 0 : 1;
-			else
-				_shiftIndex = IsShiftActive ? 1 : 0;
-			KeyPressCommand.UpdateCanExecuteState();
-		}
 
 		#region EnableAutoClearShiftAfterKeyPress Property
 
@@ -1029,6 +1156,125 @@ namespace FoxHornKeyboard.ViewModels
 				{
 					_enableAutoClearShiftAfterKeyPress = value;
 					OnPropertyChanged("EnableAutoClearShiftAfterKeyPress");
+				}
+			}
+		}
+
+		#endregion
+
+		#region InputMaskVisibility Property
+
+		private Visibility _inputMaskVisibility = Visibility.Collapsed;
+
+		public Visibility InputMaskVisibility
+		{
+			get { return _inputMaskVisibility; }
+			set
+			{
+				if (_inputMaskVisibility != value)
+				{
+					_inputMaskVisibility = value;
+					OnPropertyChanged("InputMaskVisibility");
+				}
+			}
+		}
+
+		#endregion
+
+		#region Text Property
+
+		private string _text = "";
+
+		public string Text
+		{
+			get { return _text; }
+			set
+			{
+				if (_text != value)
+				{
+					_text = value;
+					OnPropertyChanged("Text");
+					UpdateButtons();
+				}
+			}
+		}
+
+		#endregion
+
+		#region HasResults Property
+
+		private bool _hasResults;
+
+		public bool HasResults
+		{
+			get { return _hasResults; }
+			set
+			{
+				if (_hasResults != value)
+				{
+					_hasResults = value;
+					OnPropertyChanged("HasResults");
+					ShowResultsCommand.UpdateCanExecuteState();
+				}
+			}
+		}
+
+		#endregion
+
+		#region InputMask Property
+
+		private string _inputMask;
+
+		public string InputMask
+		{
+			get { return _inputMask; }
+			set
+			{
+				if (_inputMask != value)
+				{
+					_inputMask = value;
+					OnPropertyChanged("InputMask");
+				}
+			}
+		}
+
+		#endregion
+
+		#region UseMaskedInput Property
+
+		private bool _useMaskedInput;
+
+		public bool UseMaskedInput
+		{
+			get { return _useMaskedInput; }
+			set
+			{
+				if (_useMaskedInput != value)
+				{
+					_useMaskedInput = value;
+					OnPropertyChanged("UseMaskedInput");
+				}
+			}
+		}
+
+		#endregion
+
+		#region InputIndex Property
+
+		private int _inputIndex;
+
+		public int InputIndex
+		{
+			get { return _inputIndex; }
+			set
+			{
+				if (value < 0)
+					value = 0;
+				if (_inputIndex != value)
+				{
+					_inputIndex = value;
+					OnPropertyChanged("InputIndex");
+					SetSelectionPosition();
 				}
 			}
 		}
@@ -1077,208 +1323,168 @@ namespace FoxHornKeyboard.ViewModels
 
 		public ICommand NextInputFieldCommand { get; set; }
 
-		#region OnlyNumericInputAllowed Property
+		public GenericCommand LoadAutoCompleteDataCommand { get; }
 
-		private bool _onlyNumericInputAllowed;
-
-		public bool OnlyNumericInputAllowed
+		protected static readonly string[][][] SpanishKeyMap = new[]
 		{
-			get { return _onlyNumericInputAllowed; }
-			set
+			new string[][]
 			{
-				if (_onlyNumericInputAllowed != value)
-				{
-					_onlyNumericInputAllowed = value;
-					OnPropertyChanged("OnlyNumericInputAllowed");
-					KeyPressCommand.UpdateCanExecuteState();
-				}
-			}
-		}
-
-		#endregion
-
-		#region KeyboardVisibility Property
-
-		private Visibility _keyboardVisibility = Visibility.Visible;
-
-		public Visibility KeyboardVisibility
-		{
-			get { return _keyboardVisibility; }
-			set
+				new string[] {"\\"},
+				new string[] {"1", "!", "|"},
+				new string[] {"2", "\"", "@"},
+				new string[] {"3", ".", "#"},
+				new string[] {"4", "$"},
+				new string[] {"5", "%"},
+				new string[] {"6", "&"},
+				new string[] {"7", "/"},
+				new string[] {"8", "("},
+				new string[] {"9", ")"},
+				new string[] {"0", "="},
+				new string[] {"'", "?"},
+				new string[] {"¡", "¿"},
+				new string[] {"BACKSPACE"}
+			},
+			new string[][]
 			{
-				if (_keyboardVisibility != value)
-				{
-					_keyboardVisibility = value;
-					OnPropertyChanged("KeyboardVisibility");
-				}
-			}
-		}
-
-		#endregion
-
-		#region ResultsVisibility Property
-
-		private Visibility _resultsVisibility = Visibility.Collapsed;
-
-		public Visibility ResultsVisibility
-		{
-			get { return _resultsVisibility; }
-			set
+				new string[] {"TAB"},
+				new string[] {"q", "Q"},
+				new string[] {"w", "W"},
+				new string[] {"e", "E"},
+				new string[] {"r", "R"},
+				new string[] {"t", "T"},
+				new string[] {"y", "Y"},
+				new string[] {"u", "U"},
+				new string[] {"i", "I"},
+				new string[] {"o", "O"},
+				new string[] {"p", "P"},
+				new string[] {"`", "^", "["},
+				new string[] {"+", "*", "]"},
+				new string[] {"ENTER"},
+			},
+			new string[][]
 			{
-				if (_resultsVisibility != value)
-				{
-					_resultsVisibility = value;
-					OnPropertyChanged("ResultsVisibility");
-				}
-			}
-		}
-
-		#endregion
-
-		#region AllowDecimalPoint Property
-
-		private bool _allowDecimalPoint;
-
-		public bool AllowDecimalPoint
-		{
-			get { return _allowDecimalPoint; }
-			set
+				new string[] {"CAP-LOCK"},
+				new string[] {"a", "A"},
+				new string[] {"s", "S"},
+				new string[] {"d", "D"},
+				new string[] {"f", "F"},
+				new string[] {"g", "G"},
+				new string[] {"h", "H"},
+				new string[] {"j", "J"},
+				new string[] {"k", "K"},
+				new string[] {"l", "L"},
+				new string[] {"ñ", "Ñ"},
+				new string[] {"´", "¨", "{"},
+				new string[] {"Ç", "}"},
+			},
+			new string[][]
 			{
-				if (_allowDecimalPoint != value)
-				{
-					_allowDecimalPoint = value;
-					OnPropertyChanged("AllowDecimalPoint");
-					KeyPressCommand.UpdateCanExecuteState();
-				}
-			}
-		}
-
-		#endregion
-
-		protected bool CheckKeyAllowed(string value)
-		{
-			if (value == null)
-				return true;
-			if (!OnlyNumericInputAllowed)
-				return true;
-			if (AllowDecimalPoint && value == ".")
-				return true;
-			if (value.Length > 2)
+				new string[] {"SHIFT"},
+				new string[] {"<", ">"},
+				new string[] {"z", "Z"},
+				new string[] {"x", "X"},
+				new string[] {"c", "C"},
+				new string[] {"v", "V"},
+				new string[] {"b", "B"},
+				new string[] {"n", "N"},
+				new string[] {"m", "M"},
+				new string[] {",", ";"},
+				new string[] {".", ":"},
+				new string[] {"-", "_"},
+				new string[] {"SHIFT"}
+			},
+			new string[][]
 			{
-				var pos = value.Split('|').Select(o => Convert.ToInt32(o)).ToArray();
-				if (pos.Length == 2)
-				{
-					var key = GetKeyValueAt(pos[0], pos[1], _shiftIndex);
-					if (string.IsNullOrWhiteSpace(key))
-						return false;
-					return Char.IsDigit(key.First());
-				}
+				new string[] {"CTRL","CTRL","CTRL"},
+				new string[] {"","",""},
+				new string[] {"ALT","ALT","ALT"},
+				new string[] {"SPACE","SPACE","SPACE"},
+				new string[] {"ALT GR","ALT GR","ALT GR"},
+				new string[] {"","",""},
+				new string[] {"","",""},
+				new string[] {"CTRL","CTRL","CTRL"},
 			}
-			return Char.IsDigit(value.First());
-		}
+		};
 
-		private Size MeasureString(string candidate)
+		protected static readonly string[][][] EnglishKeyMap = new[]
 		{
-			var formattedText = new FormattedText(candidate, CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, _typeface, 24, Brushes.Black, _dipInfo.PixelsPerDip);
-			return new Size(formattedText.Width, formattedText.Height);
-		}
-
-
-		#region SelectionX Property
-
-		private double _selectionX = 12;
-
-		public double SelectionX
-		{
-			get { return _selectionX; }
-			set
+			new string[][]
 			{
-				if (_selectionX != value)
-				{
-					_selectionX = value;
-					OnPropertyChanged("SelectionX");
-				}
-			}
-		}
-
-		#endregion
-
-		#region SelectionY Property
-
-		private double _selectionY = 2;
-
-		public double SelectionY
-		{
-			get { return _selectionY; }
-			set
+				new string[] {"`","~"},
+				new string[] {"1", "!"},
+				new string[] {"2", "@"},
+				new string[] {"3", "#"},
+				new string[] {"4", "$"},
+				new string[] {"5", "%"},
+				new string[] {"6", "^"},
+				new string[] {"7", "&"},
+				new string[] {"8", "*"},
+				new string[] {"9", "("},
+				new string[] {"0", ")"},
+				new string[] {"-", "_"},
+				new string[] {"=", "+"},
+				new string[] {"BACKSPACE"}
+			},
+			new string[][]
 			{
-				if (_selectionY != value)
-				{
-					_selectionY = value;
-					OnPropertyChanged("SelectionY");
-				}
-			}
-		}
-
-		#endregion
-
-		#region SelectionHeight Property
-
-		private double _selectionHeight = 36;
-
-		public double SelectionHeight
-		{
-			get { return _selectionHeight; }
-			set
+				new string[] {"TAB"},
+				new string[] {"q", "Q"},
+				new string[] {"w", "W"},
+				new string[] {"e", "E"},
+				new string[] {"r", "R"},
+				new string[] {"t", "T"},
+				new string[] {"y", "Y"},
+				new string[] {"u", "U"},
+				new string[] {"i", "I"},
+				new string[] {"o", "O"},
+				new string[] {"p", "P"},
+				new string[] {"[", "["},
+				new string[] {"]", "]"},
+				new string[] {"\\","|"},
+			},
+			new string[][]
 			{
-				if (_selectionHeight != value)
-				{
-					_selectionHeight = value;
-					OnPropertyChanged("SelectionHeight");
-				}
-			}
-		}
-
-		#endregion
-
-		#region SelectionWidth Property
-
-		private double _selectionWidth = 5;
-
-		public double SelectionWidth
-		{
-			get { return _selectionWidth; }
-			set
+				new string[] {"CAP-LOCK"},
+				new string[] {"a", "A"},
+				new string[] {"s", "S"},
+				new string[] {"d", "D"},
+				new string[] {"f", "F"},
+				new string[] {"g", "G"},
+				new string[] {"h", "H"},
+				new string[] {"j", "J"},
+				new string[] {"k", "K"},
+				new string[] {"l", "L"},
+				new string[] {";", ":"},
+				new string[] {"'", "\""},
+				new string[] {"ENTER"},
+			},
+			new string[][]
 			{
-				if (_selectionWidth != value)
-				{
-					_selectionWidth = value;
-					OnPropertyChanged("SelectionWidth");
-				}
-			}
-		}
+				new string[] {"SHIFT"},
 
-		#endregion
-
-		#region SelectionBrush Property
-
-		private Brush _selectionBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(40, 0, 120, 215));
-
-		public Brush SelectionBrush
-		{
-			get { return _selectionBrush; }
-			set
+				new string[] {"z", "Z"},
+				new string[] {"x", "X"},
+				new string[] {"c", "C"},
+				new string[] {"v", "V"},
+				new string[] {"b", "B"},
+				new string[] {"n", "N"},
+				new string[] {"m", "M"},
+				new string[] {",", "<"},
+				new string[] {".", ">"},
+				new string[] {"/", "?"},
+				new string[] {"SHIFT"}
+			},
+			new string[][]
 			{
-				if (_selectionBrush != value)
-				{
-					_selectionBrush = value;
-					OnPropertyChanged("SelectionBrush");
-				}
+				new string[] {""},
+				new string[] {""},
+				new string[] {""},
+				new string[] {"SPACE"},
+				new string[] {""},
+				new string[] {""},
+				new string[] {""},
+				new string[] {""},
 			}
-		}
-
-		#endregion
-
-
+		};
 	}
 }

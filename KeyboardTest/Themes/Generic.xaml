@@ -1,4 +1,57 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+﻿<ResourceDictionary 
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+	xmlns:local="clr-namespace:FoxHornKeyboard.Layouts"
+	xmlns:assets="clr-namespace:FoxHornKeyboard.Assets"
+	xmlns:a="clr-namespace:FoxHornKeyboard.Controls">
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+		<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
+	</ResourceDictionary.MergedDictionaries>
+
+	<Style TargetType="ToggleButton" BasedOn="{StaticResource MahApps.Styles.ToggleButton.Flat}">
+
+	</Style>
+
+	<DrawingImage x:Key="{ComponentResourceKey {x:Type a:TextInputWithOnscreenKeyboard}, KeyboardImage}">
+		<DrawingImage.Drawing>
+			<DrawingGroup>
+				<DrawingGroup Opacity="1">
+					<GeometryDrawing Brush="{StaticResource MahApps.Brushes.ThemeForeground}" Geometry="{x:Static assets:PathBasedImages.KeyboardGeometry}" />
+				</DrawingGroup>
+			</DrawingGroup>
+		</DrawingImage.Drawing>
+	</DrawingImage>
+	<Style x:Key="KeyboardButton" BasedOn="{StaticResource MahApps.Styles.Button}" TargetType="Button">
+		<Setter Property="FontSize" Value="22"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch" />
+		<Setter Property="VerticalAlignment" Value="Stretch" />
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="MinWidth" Value="40" />
+		<Setter Property="MinHeight" Value="40" />
+		<Setter Property="Padding" Value="5,6"/>
+		<Setter Property="Margin" Value="3"/>
+		<Setter Property="mah:ControlsHelper.ContentCharacterCasing" Value="Normal" />
+	</Style>
+	<Style x:Key="KeyboardToggleButton" BasedOn="{StaticResource MahApps.Styles.ToggleButton}" TargetType="ToggleButton">
+		<Setter Property="FontSize" Value="24"/>
+		<Setter Property="FontWeight" Value="Bold"/>
+		<Setter Property="MinWidth" Value="40" />
+		<Setter Property="MinHeight" Value="40" />
+		<Setter Property="Padding" Value="5,6"/>
+		<Setter Property="Margin" Value="3"/>
+	</Style>
+	<Style x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, KeyboardButton}" BasedOn="{StaticResource KeyboardButton}" TargetType="Button"/>
+	<Style x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, KeyboardToggleButton}" BasedOn="{StaticResource KeyboardToggleButton}" TargetType="ToggleButton"/>
+	<Style x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, CloseButton}" BasedOn="{StaticResource MahApps.Styles.Button.MetroWindow.Close.Light.Win10}" TargetType="Button"/>
+	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, ThemeBackground}" Color="#ffffffff"/>
+	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, ThemeForeground}" Color="#ff000000"/>
+	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, Highlight}" Color="#ff00589f"/>
+	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, Accent}" Color="#cc0078d7"/>
+	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, Accent4}" Color="#330078d7"/>
+	<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, ControlBorder}" Color="#ffcccccc"/>
+
+	<!--<SolidColorBrush x:Key="{ComponentResourceKey {x:Type local:EnglishKeyboardLayout}, ThemeBackground}"  Color="{StaticResource MahApps.Brushes.Window.Background}" />-->
 </ResourceDictionary>

@@ -1,20 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace FoxHornKeyboard.ViewModels
 {
 	public class GenericCommand : ICommand
 	{
+		private readonly Predicate<object> _canExecute;
+		private readonly Action<object> _executeAction;
+
 		public event EventHandler CanExecuteChanged;
 
-		Predicate<Object> _canExecute = null;
-		Action<Object> _executeAction = null;
-
-		public GenericCommand(Predicate<Object> canExecute, Action<object> executeAction)
+		public GenericCommand(Predicate<object> canExecute, Action<object> executeAction)
 		{
 			_canExecute = canExecute;
 			_executeAction = executeAction;
@@ -29,13 +25,12 @@ namespace FoxHornKeyboard.ViewModels
 
 		public void UpdateCanExecuteState()
 		{
-			if (CanExecuteChanged != null)
-				CanExecuteChanged(this, new EventArgs());
+			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 		}
+
 		public void Execute(object parameter)
 		{
-			if (_executeAction != null)
-				_executeAction(parameter);
+			_executeAction?.Invoke(parameter);
 			UpdateCanExecuteState();
 		}
 	}

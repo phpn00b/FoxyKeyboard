@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FoxHornKeyboard
+namespace FoxHornKeyboard.ViewModels
 {
 	public static class DpiUtilities
 	{
+		private static int _dpiCache;
+		private static readonly object Mutex = new object();
+		private const int MONITOR_DEFAULTTONEAREST = 2;
+
 		// you should always use this one and it will fallback if necessary
 		// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getdpiforwindow
 		public static int GetDpiForWindow(IntPtr hwnd)
@@ -16,8 +20,11 @@ namespace FoxHornKeyboard
 
 			return Marshal.GetDelegateForFunctionPointer<GetDpiForWindowFn>(ptr)(hwnd);
 		}
+
 		public static int GetDpiForNearestMonitor(IntPtr hwnd) => GetDpiForMonitor(GetNearestMonitorFromWindow(hwnd));
+
 		public static int GetDpiForNearestMonitor(int x, int y) => GetDpiForMonitor(GetNearestMonitorFromPoint(x, y));
+
 		public static int GetDpiForMonitor(IntPtr monitor, MonitorDpiType type = MonitorDpiType.Effective)
 		{
 			var h = LoadLibrary("shcore.dll");
@@ -34,13 +41,19 @@ namespace FoxHornKeyboard
 
 		public static int GetDpiForDesktop()
 		{
-			int hr = D2D1CreateFactory(D2D1_FACTORY_TYPE.D2D1_FACTORY_TYPE_SINGLE_THREADED, typeof(ID2D1Factory).GUID, IntPtr.Zero, out ID2D1Factory factory);
-			if (hr < 0)
-				return 96; // we really hit the ground, don't know what to do next!
-
-			factory.GetDesktopDpi(out float x, out float y); // Windows 7
-			Marshal.ReleaseComObject(factory);
-			return (int)x;
+			lock (Mutex)
+			{
+				if (_dpiCache == 0)
+				{
+					int hr = D2D1CreateFactory(D2D1_FACTORY_TYPE.D2D1_FACTORY_TYPE_SINGLE_THREADED, typeof(ID2D1Factory).GUID, IntPtr.Zero, out ID2D1Factory factory);
+					if (hr < 0)
+						return 96; // we really hit the ground, don't know what to do next!
+					factory.GetDesktopDpi(out float x, out float y); // Windows 7
+					Marshal.ReleaseComObject(factory);
+					_dpiCache = (int)x;
+				}
+				return _dpiCache;
+			}
 		}
 
 		public static IntPtr GetDesktopMonitor() => GetNearestMonitorFromWindow(GetDesktopWindow());
@@ -50,8 +63,6 @@ namespace FoxHornKeyboard
 
 		private delegate int GetDpiForWindowFn(IntPtr hwnd);
 		private delegate int GetDpiForMonitorFn(IntPtr hmonitor, MonitorDpiType dpiType, out int dpiX, out int dpiY);
-
-		private const int MONITOR_DEFAULTTONEAREST = 2;
 
 		[DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
 		private static extern IntPtr LoadLibrary(string lpLibFileName);
@@ -104,5 +115,5 @@ namespace FoxHornKeyboard
 		Effective = 0,
 		Angular = 1,
 		Raw = 2,
-	}	
+	}
 }

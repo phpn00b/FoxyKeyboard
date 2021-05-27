@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;LIBFULL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;LIBFULL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -67,29 +67,53 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\KeyboardTest\Assets\PathBasedImages.cs">
+      <Link>Assets\PathBasedImages.cs</Link>
+    </Compile>
     <Compile Include="..\KeyboardTest\Controls\TextInputWithOnscreenKeyboard.xaml.cs">
       <Link>Controls\TextInputWithOnscreenKeyboard.xaml.cs</Link>
     </Compile>
     <Compile Include="..\KeyboardTest\DpiUtilities.cs">
       <Link>DpiUtilities.cs</Link>
     </Compile>
+    <Compile Include="..\KeyboardTest\Extensions.cs">
+      <Link>Extensions.cs</Link>
+    </Compile>
     <Compile Include="..\KeyboardTest\Layouts\EnglishKeyboardLayout.xaml.cs">
       <Link>Layouts\EnglishKeyboardLayout.xaml.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\KeyboardTest\Model\EnumOption.cs">
+      <Link>Model\EnumOption.cs</Link>
+    </Compile>
+    <Compile Include="..\KeyboardTest\ViewModels\BaseKeyboardInteractionViewModel.cs">
+      <Link>ViewModels\BaseKeyboardInteractionViewModel.cs</Link>
     </Compile>
     <Compile Include="..\KeyboardTest\ViewModels\BaseKeyboardLayoutViewModel.cs">
       <Link>ViewModels\BaseKeyboardLayoutViewModel.cs</Link>
     </Compile>
+    <Compile Include="..\KeyboardTest\ViewModels\BaseTypedKeyboardInteractionViewModel.cs">
+      <Link>ViewModels\BaseTypedKeyboardInteractionViewModel.cs</Link>
+    </Compile>
     <Compile Include="..\KeyboardTest\ViewModels\BaseViewModel.cs">
       <Link>ViewModels\BaseViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\KeyboardTest\ViewModels\DpiUtilities.cs">
+      <Link>ViewModels\DpiUtilities.cs</Link>
     </Compile>
     <Compile Include="..\KeyboardTest\ViewModels\GenericCommand.cs">
       <Link>ViewModels\GenericCommand.cs</Link>
     </Compile>
-    <Compile Include="..\KeyboardTest\ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs">
-      <Link>ViewModels\Languages\EnglishKeyboardLayoutViewModel.cs</Link>
+    <Compile Include="..\KeyboardTest\ViewModels\KeyboardSearchEventArgs.cs">
+      <Link>ViewModels\KeyboardSearchEventArgs.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="..\KeyboardTest\ViewModels\Languages\EnglishKeyboardViewModel.cs">
+      <Link>ViewModels\Languages\EnglishKeyboardViewModel.cs</Link>
+    </Compile>
+    <Compile Include="..\KeyboardTest\ViewModels\Languages\SpanishKeyboardViewModel.cs">
+      <Link>ViewModels\Languages\SpanishKeyboardViewModel.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -133,47 +157,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\KeyboardTest\Assets\backspace.png">
-      <Link>Assets\backspace.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\delete.png">
-      <Link>Assets\delete.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\end.png">
-      <Link>Assets\end.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\enter.png">
-      <Link>Assets\enter.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\erase.png">
-      <Link>Assets\erase.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\home.png">
-      <Link>Assets\home.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\keyboard.png">
-      <Link>Assets\keyboard.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\pick-list-item.png">
-      <Link>Assets\pick-list-item.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\select-all.png">
-      <Link>Assets\select-all.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\shift.png">
-      <Link>Assets\shift.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\start.png">
-      <Link>Assets\start.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\tab.png">
-      <Link>Assets\tab.png</Link>
-    </Resource>
-    <Resource Include="..\KeyboardTest\Assets\xout.png">
-      <Link>Assets\xout.png</Link>
-    </Resource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
